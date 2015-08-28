@@ -8,6 +8,11 @@
  *
  * Main module of the application.
  */
+angular.
+  module('pisaVisualisationApp', [
+    'd3'
+  ]);
+
 angular
   .module('pisaVisualisationApp', [
     'ngAnimate',
@@ -15,7 +20,7 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
   ])
   .config(function ($routeProvider) {
     $routeProvider
