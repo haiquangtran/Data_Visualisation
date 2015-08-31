@@ -30,9 +30,9 @@ angular
         controllerAs: 'main'
       })
       .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
+        templateUrl: 'views/vis_1.html',
+        controller: 'Vis1Ctrl',
+        controllerAs: 'vis1'
       })
       .otherwise({
         redirectTo: '/'

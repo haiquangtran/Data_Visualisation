@@ -8,7 +8,7 @@
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('AboutCtrl', function () {
+  .controller('Vis1Ctrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
