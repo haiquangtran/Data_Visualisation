@@ -1,1 +1,31 @@
-<p>This is the vis_4 view.</p>
+<div class="jumbotron">
+  <h1> Heat Map Visualisation </h1>
+</div>
+<div ng-controller="Vis4Ctrl">
+  <div class="days-hours-heatmap">
+    <!-- calibration and render type controller -->
+    <div class="calibration" role="calibration">
+      <div class="group" role="example">
+        <svg width="120" height="17">
+        </svg>
+        <div role="description" class="description">
+          <label>Less</label>
+          <label>More</label>
+        </div>
+      </div>
+      <div role="toggleDisplay" class="display-control">
+        <div>
+          <input type="radio" name="displayType" checked/>
+          <label>count</label>
+        </div>
+        <div>
+          <input type="radio" name="displayType"/>
+          <label>daily</label>
+        </div>
+      </div>
+    </div>
+    <!-- heatmap -->
+    <svg role="heatmap" class="heatmap"></svg>
+  </div>
+</div>
+
