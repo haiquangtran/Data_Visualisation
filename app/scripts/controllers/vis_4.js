@@ -28,7 +28,7 @@ angular.module('pisaVisualisationApp')
       var dateExtent = null,
         data = null,
         dayOffset = 0,
-        colorCalibration = ['#f6faaa', '#FEE08B', '#FDAE61', '#F46D43', '#D53E4F', '#9E0142'],
+        colorCalibration = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
         dailyValueExtent = {};
 
       //axises and scales
