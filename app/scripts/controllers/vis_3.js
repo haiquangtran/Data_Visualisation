@@ -8,10 +8,6 @@
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('Vis3Ctrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('Vis3Ctrl', function ($scope) {
+    $scope.myData = [10,20,30,40,60];
   });
