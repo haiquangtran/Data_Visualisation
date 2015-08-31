@@ -29,7 +29,7 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
-      .when('/about', {
+      .when('/vis_1', {
         templateUrl: 'views/vis_1.html',
         controller: 'Vis1Ctrl',
         controllerAs: 'vis1'
