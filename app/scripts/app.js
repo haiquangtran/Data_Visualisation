@@ -34,6 +34,21 @@ angular
         controller: 'Vis1Ctrl',
         controllerAs: 'vis1'
       })
+      .when('/vis_2', {
+        templateUrl: 'views/vis_2.html',
+        controller: 'Vis2Ctrl',
+        controllerAs: 'vis2'
+      })
+      .when('/vis_3', {
+        templateUrl: 'views/vis_3.html',
+        controller: 'Vis3Ctrl',
+        controllerAs: 'vis3'
+      })
+      .when('/vis_4', {
+        templateUrl: 'views/vis_4.html',
+        controller: 'Vis4Ctrl',
+        controllerAs: 'vis4'
+      })
       .otherwise({
         redirectTo: '/'
       });
