@@ -1,7 +1,7 @@
 <div class="jumbotron">
   <h1> Heat Map Visualisation </h1>
 </div>
-<div ng-controller="Vis4Ctrl">
+<div  ng-app="pisaVisualisationApp" ng-controller="Vis4Ctrl">
   <div class="days-hours-heatmap">
     <!-- calibration and render type controller -->
     <div class="calibration" role="calibration">
@@ -25,7 +25,7 @@
       </div>
     </div>
     <!-- heatmap -->
-    <svg role="heatmap" class="heatmap"></svg>
+    <heat-map chart-data="myData"></heat-map>
   </div>
 </div>
 
