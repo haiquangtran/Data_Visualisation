@@ -19,7 +19,7 @@ angular.module('pisaVisualisationApp')
           var itemSize = 18,
             cellSize = itemSize - 1,
             width = 800,
-            height = 800,
+            height = 500,
             margin = {top: 20, right: 20, bottom: 20, left: 25};
 
           //formats
