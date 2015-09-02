@@ -8,8 +8,8 @@
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('Vis4Ctrl', function ($http, $scope, dataLoaderService) {
-    dataLoaderService.getHeatMapData.success(function (response) {
+  .controller('Vis4Ctrl', function ($scope, fileService) {
+    fileService.getHeatMapData.success(function (response) {
       $scope.myData = response;
     });
 

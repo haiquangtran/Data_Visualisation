@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: dataLoaderService', function () {
+describe('Service: fileService', function () {
 
   // load the service's module
   beforeEach(module('pisaVisualisationApp'));

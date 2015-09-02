@@ -68,6 +68,7 @@ angular.module('pisaVisualisationApp')
           scope.$watch('data', function(data){
             if(!data){ return; }
             data = data.data;
+
             data.forEach(function (valueObj) {
               valueObj['date'] = timeFormat.parse(valueObj['timestamp']);
               var day = valueObj['day'] = monthDayFormat(valueObj['date']);

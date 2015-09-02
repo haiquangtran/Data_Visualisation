@@ -8,9 +8,6 @@
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('Vis2Ctrl', function ($scope, $http, d3Service) {
-    d3Service.d3().then(function(d3) {
-
-    });
-
+  .controller('Vis2Ctrl', function ($scope, fileService) {
+      $scope.myData = fileService.getRawDataFile;
   });
