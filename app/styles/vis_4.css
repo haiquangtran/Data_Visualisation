@@ -35,3 +35,6 @@
 .days-hours-heatmap .heatmap .axis text {
   font-size: 12px;
 }
+.days-hours-heatmap .selected {
+  fill: red;
+}

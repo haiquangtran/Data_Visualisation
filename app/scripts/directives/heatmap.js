@@ -103,6 +103,17 @@ angular.module('pisaVisualisationApp')
               .text('time')
               .attr('transform', 'translate(-10,' + axisHeight + ') rotate(-90)');
 
+            //tool  tip
+            var tooltip = d3.select("body")
+              .append("div")
+              .style("position", "absolute")
+              .style("z-index", "10")
+              .style("visibility", "hidden")
+              .style("width", "200px")
+              .style("height", "100px")
+              .style("background", "rgba(255,255, 255,0.8)")
+              .style("text-align", "center");
+
             //render heatmap rects
             dayOffset = dayFormat(dateExtent[0]);
             rect = heatmap.selectAll('rect')
@@ -118,19 +129,25 @@ angular.module('pisaVisualisationApp')
               })
               .attr('fill', '#ffffff')
               .on("mouseover", function(d, i) {
-                d3.select(this).attr('fill', 'red');
+                d3.select(this).classed('selected', true);
+                tooltip.text(d.date);
+                tooltip.style("visibility", "visible");
+              })
+              .on("mousemove", function() {
+                return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
               })
               .on("mouseout", function(d, i) {
-                d3.select(this).attr('fill', 'blue');
+                d3.select(this).classed('selected', false);
+                tooltip.style("visibility", "hidden");
               });
 
-            rect.filter(function (d) {
-              return d.value['PM2.5'] > 0;
-            })
-              .append('title')
-              .text(function (d) {
-                return monthDayFormat(d.date) + ' ' + d.value['PM2.5'];
-              });
+            //rect.filter(function (d) {
+            //  return d.value['PM2.5'] > 0;
+            //})
+            //  .append('title')
+            //  .text(function (d) {
+            //    return monthDayFormat(d.date) + ' ' + d.value['PM2.5'];
+            //  });
 
             renderColor();
           });
