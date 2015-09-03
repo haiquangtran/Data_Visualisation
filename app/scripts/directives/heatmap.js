@@ -116,7 +116,13 @@ angular.module('pisaVisualisationApp')
               .attr('y', function (d) {
                 return hourFormat(d.date) * itemSize;
               })
-              .attr('fill', '#ffffff');
+              .attr('fill', '#ffffff')
+              .on("mouseover", function(d, i) {
+                d3.select(this).attr('fill', 'red');
+              })
+              .on("mouseout", function(d, i) {
+                d3.select(this).attr('fill', 'blue');
+              });
 
             rect.filter(function (d) {
               return d.value['PM2.5'] > 0;
