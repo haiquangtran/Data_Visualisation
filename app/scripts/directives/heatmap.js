@@ -141,14 +141,6 @@ angular.module('pisaVisualisationApp')
                 tooltip.style("visibility", "hidden");
               });
 
-            //rect.filter(function (d) {
-            //  return d.value['PM2.5'] > 0;
-            //})
-            //  .append('title')
-            //  .text(function (d) {
-            //    return monthDayFormat(d.date) + ' ' + d.value['PM2.5'];
-            //  });
-
             renderColor();
           });
 
