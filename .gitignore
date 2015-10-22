@@ -3,3 +3,5 @@
 /.tmp
 /.sass-cache
 .idea/
+app/data/parent_answers.csv
+app/data/students_answers.csv
