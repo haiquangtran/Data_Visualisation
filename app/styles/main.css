@@ -59,6 +59,91 @@ body {
   margin-top: 28px;
 }
 
+/* Hero */
+
+.parallax {
+  width:100%;
+  height:570px;
+
+  display: block;
+  background-attachment: fixed;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position: center center;
+}
+
+.jumbotron .motto {
+  color: #333;
+  font-size: 64px;
+  font-weight: 600;
+  position: relative;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.27);
+  text-transform: uppercase;
+  z-index: 3;
+  margin: 0 auto;
+  top: 22%;
+}
+.motto .pro {
+  position: absolute;
+  bottom: 74px;
+  right: -28px;
+  font-size: 18px;
+  background-color: #333;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 70px;
+  color: white;
+  text-shadow: 0 0 0;
+}
+
+.jumbotron .motto .border {
+  border: 3px solid #333;
+  padding: 0px 30px;
+  text-align: center;
+}
+
+.parallax .parallax-image {
+  overflow: hidden;
+}
+.parallax .parallax-image img{
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive Design */
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  /* Styles */
+  .jumbotron .motto {
+    font-size: 32px;
+  }
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen
+and (min-width : 321px) {
+  /* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (max-width : 320px) {
+  /* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px) {
+  /* Styles */
+}
+
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
@@ -83,87 +168,4 @@ body {
   }
 }
 
-/* Hero */
-
-.parallax {
-  width:100%;
-  height:570px;
-
-  display: block;
-  background-attachment: fixed;
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-position: center center;
-}
-
-.jumbotron .motto {
-  color: black;
-  font-size: 64px;
-  font-weight: 600;
-  position: relative;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.27);
-  text-transform: uppercase;
-  z-index: 3;
-  margin: 0 auto;
-  top: 22%;
-}
-.motto .pro {
-  position: absolute;
-  bottom: 74px;
-  right: -28px;
-  font-size: 18px;
-  background-color: black;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 70px;
-  color: white;
-  text-shadow: 0 0 0;
-}
-
-.jumbotron .motto .border {
-  border: 3px solid black;
-  padding: 0px 30px;
-  text-align: center;
-}
-
-.parallax .parallax-image {
-  overflow: hidden;
-}
-.parallax .parallax-image img{
-  max-width: 100%;
-  height: auto;
-}
-
-@media (max-width: 768px) {
-  .parallax .parallax-image {
-    width: 100%;
-    height: 640px;
-    overflow: hidden;
-  }
-  .parallax .parallax-image img{
-    height: 100%;
-    width: auto;
-  }
-}
-
-@media screen and (min-width: 991px) {
-  .lightbox .modal-dialog {
-    width: 960px;
-  }
-}
-
-@media (max-width: 768px) {
-  .btn, .btn-morphing{
-    margin-bottom: 10px;
-  }
-  .jumbotron .motto {
-    top: 170px;
-    margin-top: 0;
-    font-size: 60px;
-    width: 270px;
-  }
-}
 
