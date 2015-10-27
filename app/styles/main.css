@@ -123,6 +123,11 @@ and (max-device-width : 480px) {
   .jumbotron .motto {
     font-size: 32px;
   }
+
+  /* Circle motto */
+  .motto .pro {
+    display: none;
+  }
 }
 
 /* Smartphones (landscape) ----------- */
