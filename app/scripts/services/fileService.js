@@ -13,31 +13,41 @@ angular.module('pisaVisualisationApp')
 
     /* Load Data from Files */
 
-    function loadFile1() {
+    function loadFileMiserables() {
       return $http.get(dir + 'miserables.json');
     };
 
-    function loadFile2() {
+    function loadFileHeatMap() {
       return $http.get(dir + 'pm25.json');
     }
 
-    function loadFile3() {
+    function loadFileRaw() {
       return $http.get(dir + 'raw_data.csv');
     }
 
     /* Get the name of CSV files */
 
-    function getFileName1() {
+    function getFileNameRaw() {
       return dir + "raw_data.csv";
+    }
+
+    function getFileNameParents() {
+      return dir + "parent_answers.csv";
+    }
+
+    function getFileNameStudents() {
+      return dir + "students_answers.csv";
     }
 
 
     // Public API here
     return {
-      getForceMapData: loadFile1(),
-      getHeatMapData: loadFile2(),
-      getStackedBarData: loadFile3(),
-      getRawDataFile: getFileName1()
+      getForceMapData: loadFileMiserables(),
+      getHeatMapData: loadFileHeatMap(),
+      getStackedBarData: loadFileRaw(),
+      getRawDataFile: getFileNameRaw(),
+      getStudentsDataFile: getFileNameStudents(),
+      getParentsDataFile: getFileNameParents()
     };
   });
 
