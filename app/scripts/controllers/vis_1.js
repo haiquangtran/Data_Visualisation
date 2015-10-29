@@ -8,7 +8,6 @@
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('Vis1Ctrl', function () {
-
-
+  .controller('Vis1Ctrl', function ($scope, fileService) {
+    $scope.myData = fileService.getParentsExpectationsFileName;
   });

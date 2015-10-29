@@ -39,15 +39,19 @@ angular.module('pisaVisualisationApp')
       return dir + "students_answers.csv";
     }
 
+    function getFileNameParentsExpectations() {
+      return dir + "parents_expectations.csv";
+    }
 
     // Public API here
     return {
       getForceMapData: loadFileMiserables(),
       getHeatMapData: loadFileHeatMap(),
       getStackedBarData: loadFileRaw(),
-      getRawDataFile: getFileNameRaw(),
-      getStudentsDataFile: getFileNameStudents(),
-      getParentsDataFile: getFileNameParents()
+      getRawFileName: getFileNameRaw(),
+      getStudentsFileName: getFileNameStudents(),
+      getParentsFileName: getFileNameParents(),
+      getParentsExpectationsFileName: getFileNameParentsExpectations()
     };
   });
 
