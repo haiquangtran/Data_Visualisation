@@ -76,25 +76,39 @@ angular.module('pisaVisualisationApp')
 
               var graphQualifications = d3.select(element[0]);
 
+              // Frequency of parents qualifications
               graphQualifications.append("div").attr("class", "chartBackdrop")
                 .selectAll('div')
                 .data(qualifications).enter().append("div")
                 .transition().ease("elastic")
                 .style("width", function(d) { return d/1000 + "%"; })
-                .style("background-color", function(d, i) { return colourScheme[Math.round(i % colourScheme.length)];})
-                .style("color", "white")
+                .style("background-color", function(d, i) { return "yellow";})
+                .style("color", "black")
                 .text(function(d) { return d + " freq"; });
 
-              //Create SVG element
               var graphExpectations = d3.select(element[0]);
 
+              // Frequency of parents expectations
               graphExpectations.append("div")
                 .attr("class", "chartBackdrop")
                 .selectAll('div')
                 .data(expectations).enter().append("div")
                 .transition().ease("elastic")
                 .style("width", function(d) { return d/1000 + "%"; })
-                .style("background-color", function(d, i) { return colourScheme[Math.round(i % colourScheme.length)];})
+                .style("background-color", function(d, i) { return "orange";})
+                .style("color", "white")
+                .text(function(d) { return d + " freq"; });
+
+              var graphSalary = d3.select(element[0]);
+
+              // Frequency of parents salary
+              graphSalary.append("div")
+                .attr("class", "chartBackdrop")
+                .selectAll('div')
+                .data(salary).enter().append("div")
+                .transition().ease("elastic")
+                .style("width", function(d) { return d/1000 + "%"; })
+                .style("background-color", function(d, i) { return "black";})
                 .style("color", "white")
                 .text(function(d) { return d + " freq"; });
             });

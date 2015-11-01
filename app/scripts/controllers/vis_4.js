@@ -9,8 +9,8 @@
  */
 angular.module('pisaVisualisationApp')
   .controller('Vis4Ctrl', function ($scope, fileService) {
-    fileService.getHeatMapData.success(function (response) {
-      $scope.myData = response;
-    });
-
+    //fileService.getHeatMapData.success(function (response) {
+    //  $scope.myData = response;
+    //});
+    $scope.myData = fileService.getParentsExpectationsFileName;
   });

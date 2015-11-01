@@ -65,85 +65,110 @@ angular.module('pisaVisualisationApp')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
           var rect = null;
 
-          scope.$watch('data', function(data){
-            if(!data){ return; }
-            data = data.data;
+          scope.$watch('data', function(fileName) {
+            if(!fileName){ return; }
 
-            data.forEach(function (valueObj) {
-              valueObj['date'] = timeFormat.parse(valueObj['timestamp']);
-              var day = valueObj['day'] = monthDayFormat(valueObj['date']);
+            console.log(fileName);
+            d3.csv(fileName, function (data) {
 
-              var dayData = dailyValueExtent[day] = (dailyValueExtent[day] || [1000, -1]);
-              var pmValue = valueObj['value']['PM2.5'];
-              dayData[0] = d3.min([dayData[0], pmValue]);
-              dayData[1] = d3.max([dayData[1], pmValue]);
-            }, true);
+              // TODO: Test data
+              var data = [
+                {
+                  "timestamp":"2014-09-25T00:00:00",
+                  "value":{
+                    "PM2.5":30.22
+                  }
+                },
+                {
+                  "timestamp":"2014-09-25T01:00:00",
+                  "value":{
+                    "PM2.5":41.61
+                  }
+                }
+              ];
 
-            dateExtent = d3.extent(data, function (d) {
-              return d.date;
-            });
+              data.forEach(function (valueObj) {
+                valueObj['date'] = timeFormat.parse(valueObj['timestamp']);
+                var day = valueObj['day'] = monthDayFormat(valueObj['date']);
 
-            axisWidth = itemSize * (dayFormat(dateExtent[1]) - dayFormat(dateExtent[0]) + 1);
+                var dayData = dailyValueExtent[day] = (dailyValueExtent[day] || [1000, -1]);
+                var pmValue = valueObj['value']['PM2.5'];
+                dayData[0] = d3.min([dayData[0], pmValue]);
+                dayData[1] = d3.max([dayData[1], pmValue]);
+              }, true);
 
-            //render axises
-            xAxis.scale(xAxisScale.range([0, axisWidth]).domain([dateExtent[0], dateExtent[1]]));
-            svg.append('g')
-              .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-              .attr('class', 'x axis')
-              .call(xAxis)
-              .append('text')
-              .text('date')
-              .attr('transform', 'translate(' + axisWidth + ',-10)');
 
-            svg.append('g')
-              .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-              .attr('class', 'y axis')
-              .call(yAxis)
-              .append('text')
-              .text('time')
-              .attr('transform', 'translate(-10,' + axisHeight + ') rotate(-90)');
-
-            //tool  tip
-            var tooltip = d3.select("body")
-              .append("div")
-              .style("position", "absolute")
-              .style("z-index", "10")
-              .style("visibility", "hidden")
-              .style("width", "200px")
-              .style("height", "100px")
-              .style("background", "rgba(255,255, 255,0.8)")
-              .style("text-align", "center");
-
-            //render heatmap rects
-            dayOffset = dayFormat(dateExtent[0]);
-            rect = heatmap.selectAll('rect')
-              .data(data)
-              .enter().append('rect')
-              .attr('width', cellSize)
-              .attr('height', cellSize)
-              .attr('x', function (d) {
-                return itemSize * (dayFormat(d.date) - dayOffset);
-              })
-              .attr('y', function (d) {
-                return hourFormat(d.date) * itemSize;
-              })
-              .attr('fill', '#ffffff')
-              .on("mouseover", function(d, i) {
-                d3.select(this).classed('selected', true);
-                tooltip.text(d.date);
-                tooltip.style("visibility", "visible");
-              })
-              .on("mousemove", function() {
-                return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-              })
-              .on("mouseout", function(d, i) {
-                d3.select(this).classed('selected', false);
-                tooltip.style("visibility", "hidden");
+              dateExtent = d3.extent(data, function (d) {
+                return d.date;
               });
 
-            renderColor();
+              axisWidth = itemSize * (dayFormat(dateExtent[1]) - dayFormat(dateExtent[0]) + 1);
+
+              //TODO: AXIS
+              //render axises
+              //xAxis.scale(xAxisScale.range([0, axisWidth]).domain([dateExtent[0], dateExtent[1]]));
+              //svg.append('g')
+              //  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+              //  .attr('class', 'x axis')
+              //  .call(xAxis)
+              //  .append('text')
+              //  .text('date')
+              //  .attr('transform', 'translate(' + axisWidth + ',-10)');
+              //
+              //svg.append('g')
+              //  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+              //  .attr('class', 'y axis')
+              //  .call(yAxis)
+              //  .append('text')
+              //  .text('time')
+              //  .attr('transform', 'translate(-10,' + axisHeight + ') rotate(-90)');
+
+              //tool  tip
+              var tooltip = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .style("width", "200px")
+                .style("height", "100px")
+                .style("background", "rgba(255,255, 255,0.8)")
+                .style("text-align", "center");
+
+              //render heatmap rects
+              dayOffset = dayFormat(dateExtent[0]);
+              rect = heatmap.selectAll('rect')
+                .data(data)
+                .enter().append('rect')
+                .attr('width', cellSize)
+                .attr('height', cellSize)
+                .attr('x', function (d) {
+                  return itemSize * (dayFormat(d.date) - dayOffset);
+                })
+                .attr('y', function (d) {
+                  return hourFormat(d.date) * itemSize;
+                })
+                .attr('fill', '#ffffff')
+                .on("mouseover", function(d, i) {
+                  d3.select(this).classed('selected', true);
+                  tooltip.text(d.date);
+                  tooltip.style("visibility", "visible");
+                })
+                .on("mousemove", function() {
+                  return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                })
+                .on("mouseout", function(d, i) {
+                  d3.select(this).classed('selected', false);
+                  tooltip.style("visibility", "hidden");
+                });
+
+              renderColor();
+            });
+
           });
 
+          /**
+           * Triggers count or daily radio buttons when clicked
+           */
           function initCalibration() {
             d3.select('[role="calibration"] [role="example"]').select('svg')
               .selectAll('rect').data(colorCalibration).enter()
@@ -167,16 +192,13 @@ angular.module('pisaVisualisationApp')
             var renderByCount = document.getElementsByName('displayType')[0].checked;
 
             rect
-              .filter(function (d) {
-                return (d.value['PM2.5'] >= 0);
-              })
               .transition()
               .delay(function (d) {
                 return (dayFormat(d.date) - dayOffset) * 15;
               })
               .duration(500)
               .attrTween('fill', function (d, i, a) {
-                //choose color dynamicly
+                //choose color dynamically
                 var colorIndex = d3.scale.quantize()
                   .range([0, 1, 2, 3, 4, 5])
                   .domain((renderByCount ? [0, 500] : dailyValueExtent[d.day]));
@@ -187,7 +209,6 @@ angular.module('pisaVisualisationApp')
 
           //extend frame height in `http://bl.ocks.org/`
           d3.select(self.frameElement).style("height", "600px");
-
         });
       }
     };
