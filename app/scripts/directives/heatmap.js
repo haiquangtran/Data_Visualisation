@@ -32,8 +32,7 @@ angular.module('pisaVisualisationApp')
           var dateExtent = null,
             data = null,
             dayOffset = 0,
-            colorCalibration = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
-            dailyValueExtent = {};
+            colorCalibration = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
 
           //axises and scales
           var axisWidth = 0,
@@ -65,63 +64,88 @@ angular.module('pisaVisualisationApp')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
           var rect = null;
 
+          function addTo(array, arrayIndex, question, data, answer) {
+            if (data[question] === answer) {
+              array[arrayIndex]++;
+            }
+          };
+
           scope.$watch('data', function(fileName) {
             if(!fileName){ return; }
 
-            console.log(fileName);
             d3.csv(fileName, function (data) {
+
+              var income = [290211, 111092, 78853, 53184, 39265, 9979];
+              var expectations = [32248, 19943, 47945, 10776, 24516, 63403];
 
               // TODO: Test data
               var data = [
                 {
-                  "timestamp":"2014-09-25T00:00:00",
-                  "value":{
-                    "PM2.5":30.22
+                  "expectation":"2014-09-25T01:00:01",
+                  "income":{
+                    "frequency":30.22
                   }
                 },
                 {
-                  "timestamp":"2014-09-25T01:00:00",
-                  "value":{
-                    "PM2.5":41.61
+                  "expectation":"2014-09-25T01:00:01",
+                  "income":{
+                    "frequency":41.61
                   }
                 }
               ];
+              //var data = [
+              //  {
+              //    "expectation": "level1",
+              //    "salary": {
+              //      "Less than <$A>": 0,
+              //      "<$A> or more but less than <$B>": 0,
+              //      "<$B> or more but less than <$C>": 0,
+              //      "<$C> or more but less than <$D>": 0,
+              //      "<$D> or more but less than <$E>": 0,
+              //      "<$E> or more": 0
+              //    }
+              //  },
+              //  {
+              //    "expectation": "level2",
+              //    "salary": {
+              //      "Less than <$A>": 0,
+              //      "<$A> or more but less than <$B>": 0,
+              //      "<$B> or more but less than <$C>": 0,
+              //      "<$C> or more but less than <$D>": 0,
+              //      "<$D> or more but less than <$E>": 0,
+              //      "<$E> or more": 0
+              //    }
+              //  }
+              //];
 
               data.forEach(function (valueObj) {
-                valueObj['date'] = timeFormat.parse(valueObj['timestamp']);
-                var day = valueObj['day'] = monthDayFormat(valueObj['date']);
-
-                var dayData = dailyValueExtent[day] = (dailyValueExtent[day] || [1000, -1]);
-                var pmValue = valueObj['value']['PM2.5'];
-                dayData[0] = d3.min([dayData[0], pmValue]);
-                dayData[1] = d3.max([dayData[1], pmValue]);
+                valueObj['date'] = timeFormat.parse(valueObj['expectation']);
               }, true);
-
 
               dateExtent = d3.extent(data, function (d) {
                 return d.date;
               });
 
-              axisWidth = itemSize * (dayFormat(dateExtent[1]) - dayFormat(dateExtent[0]) + 1);
+              axisWidth = itemSize * ((dateExtent[1]) - (dateExtent[0]) + 1);
 
               //TODO: AXIS
               //render axises
-              //xAxis.scale(xAxisScale.range([0, axisWidth]).domain([dateExtent[0], dateExtent[1]]));
-              //svg.append('g')
-              //  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-              //  .attr('class', 'x axis')
-              //  .call(xAxis)
-              //  .append('text')
-              //  .text('date')
-              //  .attr('transform', 'translate(' + axisWidth + ',-10)');
-              //
-              //svg.append('g')
-              //  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-              //  .attr('class', 'y axis')
-              //  .call(yAxis)
-              //  .append('text')
-              //  .text('time')
-              //  .attr('transform', 'translate(-10,' + axisHeight + ') rotate(-90)');
+              xAxis.scale(xAxisScale.range([0, axisWidth]).domain([dateExtent[0], dateExtent[1]]));
+              svg.append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+                .attr('class', 'x axis')
+                .call(xAxis)
+                .append('text')
+                .text('date')
+                .attr('transform', 'translate(' + axisWidth + ',-10)');
+
+              svg.append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+                .attr('class', 'y axis')
+                .call(yAxis)
+                .append('text')
+                .text('time')
+                .attr('transform', 'translate(-10,' + axisHeight + ') rotate(-90)');
 
               //tool  tip
               var tooltip = d3.select("body")
@@ -144,13 +168,13 @@ angular.module('pisaVisualisationApp')
                 .attr('x', function (d) {
                   return itemSize * (dayFormat(d.date) - dayOffset);
                 })
-                .attr('y', function (d) {
-                  return hourFormat(d.date) * itemSize;
+                .attr('y', function (d, i) {
+                  return i * itemSize;
                 })
                 .attr('fill', '#ffffff')
                 .on("mouseover", function(d, i) {
                   d3.select(this).classed('selected', true);
-                  tooltip.text(d.date);
+                  tooltip.text("This is a test");
                   tooltip.style("visibility", "visible");
                 })
                 .on("mousemove", function() {
@@ -194,16 +218,16 @@ angular.module('pisaVisualisationApp')
             rect
               .transition()
               .delay(function (d) {
-                return (dayFormat(d.date) - dayOffset) * 15;
+                return 1;
               })
               .duration(500)
               .attrTween('fill', function (d, i, a) {
                 //choose color dynamically
                 var colorIndex = d3.scale.quantize()
                   .range([0, 1, 2, 3, 4, 5])
-                  .domain((renderByCount ? [0, 500] : dailyValueExtent[d.day]));
+                  .domain((renderByCount ? [0, 500] : [500,100]));
 
-                return d3.interpolate(a, colorCalibration[colorIndex(d.value['PM2.5'])]);
+                return d3.interpolate(a, colorCalibration[colorIndex(d.income['frequency'])]);
               });
           }
 

@@ -47,6 +47,10 @@ angular.module('pisaVisualisationApp')
       return dir + "pm25.json";
     }
 
+    function getFileNameHeatMapTwo() {
+      return dir + "data.tsv";
+    }
+
     // Public API here
     return {
       getForceMapData: loadFileMiserables(),
@@ -56,7 +60,8 @@ angular.module('pisaVisualisationApp')
       getStudentsFileName: getFileNameStudents(),
       getParentsFileName: getFileNameParents(),
       getParentsExpectationsFileName: getFileNameParentsExpectations(),
-      getHeatMapFileName: getFileNameHeatMap()
+      getHeatMapFileName: getFileNameHeatMap(),
+      getHeatMapTwoFileName: getFileNameHeatMapTwo()
     };
   });
 

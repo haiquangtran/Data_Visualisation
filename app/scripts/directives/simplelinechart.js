@@ -19,7 +19,7 @@ angular.module('pisaVisualisationApp')
             if (data[question] === answer) {
               array[arrayIndex]++;
             }
-          }
+          };
 
           scope.$watch('data', function(fileName) {
             if (!fileName) {

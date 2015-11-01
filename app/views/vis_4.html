@@ -1,31 +1,8 @@
 <div class="jumbotron">
   <h1> Heat Map Visualisation </h1>
 </div>
-<div  ng-app="pisaVisualisationApp" ng-controller="Vis4Ctrl">
-  <div class="days-hours-heatmap">
-    <!-- calibration and render type controller -->
-    <div class="calibration" role="calibration">
-      <div class="group" role="example">
-        <svg width="120" height="17">
-        </svg>
-        <div role="description" class="description">
-          <label>Less</label>
-          <label>More</label>
-        </div>
-      </div>
-      <div role="toggleDisplay" class="display-control">
-        <div>
-          <input type="radio" name="displayType" checked/>
-          <label>count</label>
-        </div>
-        <div>
-          <input type="radio" name="displayType"/>
-          <label>daily</label>
-        </div>
-      </div>
-    </div>
-    <!-- heatmap -->
-    <heat-map chart-data="myData"></heat-map>
-  </div>
-</div>
 
+<div id="chart"></div>
+<div id="dataset-picker">
+  <heat-map-two chart-data="myData"></heat-map-two>
+</div>
