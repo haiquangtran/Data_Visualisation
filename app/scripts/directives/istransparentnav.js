@@ -5,7 +5,7 @@ var transparent = false;
 
 var navBar = {
   checkScrollForTransparentNavbar: debounce(function () {
-    if ($(document).scrollTop() > 260) {
+    if ($(document).scrollTop() > 150) {
       if (transparent) {
         transparent = false;
         $('nav[role="navigation"]').removeClass('navbar-transparent');
