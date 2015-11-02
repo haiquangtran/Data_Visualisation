@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc directive
- * @name pisaVisualisationApp.directive:simpleLineChart
+ * @name pisaVisualisationApp.directive:horizontalBarChart
  * @description
- * # simpleLineChart
+ * # horizontalBarChart
  */
 angular.module('pisaVisualisationApp')
   .directive('horizontalBarChart', ['d3Service', function(d3Service) {

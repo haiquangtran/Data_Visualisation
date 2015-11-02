@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc directive
- * @name pisaVisualisationApp.directive:heatMap
+ * @name pisaVisualisationApp.directive:heatMapTwo
  * @description
- * # heatMap
+ * # heatMapTwo
  */
 angular.module('pisaVisualisationApp')
   .directive('heatMapTwo', function (d3Service) {
