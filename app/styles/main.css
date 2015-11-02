@@ -20,7 +20,6 @@ body {
 /* Custom page header */
 .header {
   border-bottom: 1px solid #e5e5e5;
-  margin-bottom: 10px;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
@@ -28,6 +27,13 @@ body {
   margin-bottom: 0;
   line-height: 40px;
   padding-bottom: 19px;
+}
+
+.navbar-transparent {
+  padding-top: 15px;
+  background-color: transparent;
+  color: white;
+  border-bottom: 1px solid transparent;
 }
 
 /* Wrapper */
@@ -67,14 +73,47 @@ body {
 /* Hero */
 
 .parallax {
-  width:100%;
-  height:570px;
-
+  width: 100%;
+  height: 570px;
+  overflow: hidden;
   display: block;
-  background-attachment: fixed;
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-position: center center;
+}
+
+.parallax .small-info {
+  color: #FFFFFF;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.27);
+  top: 37%;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+}
+
+.parallax .small-info h3 {
+  max-width: 790px;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+.parallax .parallax-image img {
+  width: 100%;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .parallax .parallax-image {
+    width: 100%;
+    height: 640px;
+    overflow: hidden; }
+
+  .parallax .parallax-image img {
+    height: 100%;
+    width: auto; }
+
+  .parallax .small-info {
+    text-shadow: 0 0 10px black;
+    padding: 5px;
+    font-size: 20px !important; }
 }
 
 .jumbotron .motto {
@@ -108,14 +147,6 @@ body {
   border: 3px solid #333;
   padding: 0px 30px;
   text-align: center;
-}
-
-.parallax .parallax-image {
-  overflow: hidden;
-}
-.parallax .parallax-image img{
-  max-width: 100%;
-  height: auto;
 }
 
 /* Responsive Design */
@@ -169,13 +200,9 @@ and (max-device-width : 1024px) {
     padding-left: 0;
     padding-right: 0;
   }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
+
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
     border-bottom: 0;
   }
 }
-
