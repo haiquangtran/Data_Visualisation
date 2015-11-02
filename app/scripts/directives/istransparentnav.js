@@ -1,5 +1,5 @@
 'use strict';
-/* TODO: put this into a directive */
+/* TODO: Ideally this should be put into a directive. If you have time do it. */
 
 var transparent = false;
 

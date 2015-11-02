@@ -29,11 +29,21 @@ body {
   padding-bottom: 19px;
 }
 
-.navbar-transparent {
-  padding-top: 15px;
-  background-color: transparent;
+/* Navigation Bar */
+.header .nav,
+.header .nav li,
+.header .nav li a,
+.header .navbar-brand {
   color: white;
-  border-bottom: 1px solid transparent;
+}
+
+.navbar-default {
+  background-color: darkgreen;
+}
+
+.navbar-transparent {
+  background-color: transparent;
+  border-bottom: 1px solid white;
 }
 
 /* Wrapper */
