@@ -9,10 +9,11 @@
  */
 angular.module('pisaVisualisationApp')
   .controller('Vis4Ctrl', function ($scope, fileService) {
-    $scope.myData = fileService.getHeatMapTwoFileName;
+    $scope.barData = fileService.getParentsExpectationsFileName;
+    $scope.heatData = fileService.getHeatMapTwoFileName;
 
     // Set dataset when button clicked
     $scope.setDataset = function() {
-      $scope.myData = fileService.getHeatMapTwoFileName;
+      $scope.heatData = fileService.getHeatMapTwoFileName;
     }
   });

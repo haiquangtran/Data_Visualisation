@@ -191,9 +191,8 @@ and (max-device-width : 480px) {
     font-size: 32px;
   }
 
-  /* Circle motto */
-  .motto .pro {
-    display: none;
+  .hero-title .heading {
+    top: 35%;
   }
 }
 

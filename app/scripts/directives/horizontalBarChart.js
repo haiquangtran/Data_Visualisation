@@ -7,7 +7,7 @@
  * # simpleLineChart
  */
 angular.module('pisaVisualisationApp')
-  .directive('simpleLineChart', ['d3Service', function(d3Service) {
+  .directive('horizontalBarChart', ['d3Service', function(d3Service) {
     return {
       restrict: 'E',
       replace: false,
