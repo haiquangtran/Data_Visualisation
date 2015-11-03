@@ -1,7 +1,7 @@
 'use strict';
 /* TODO: Ideally this should be put into a directive. If you have time do it. */
 
-var transparent = false;
+var transparent = true;
 
 var navBar = {
   checkScrollForTransparentNavbar: debounce(function () {
@@ -16,7 +16,7 @@ var navBar = {
         $('nav[role="navigation"]').addClass('navbar-transparent');
       }
     }
-  }, 17)
+  }, 30)
 };
 
 // Returns a function, that, as long as it continues to be invoked, will not

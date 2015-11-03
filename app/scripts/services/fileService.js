@@ -48,7 +48,7 @@ angular.module('pisaVisualisationApp')
     }
 
     function getFileNameHeatMapTwo() {
-      return dir + "data.tsv";
+      return dir + "total_parents_expectations.csv";
     }
 
     // Public API here

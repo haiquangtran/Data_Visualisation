@@ -7,7 +7,7 @@
  * # heatMapTwo
  */
 angular.module('pisaVisualisationApp')
-  .directive('heatMapTwo', function (d3Service) {
+  .directive('heatMapTwo', function (d3Service, preprocessorHelper) {
     return {
       restrict: 'E',
       replace: false,
@@ -19,19 +19,21 @@ angular.module('pisaVisualisationApp')
             if (!fileName) {
               return;
             }
-
-            var margin = { top: 50, right: 0, bottom: 100, left: 120 },
+            console.log(element);
+            console.log(element[0].nextElementSibling);
+            console.log(element[0].offsetWidth);
+            var margin = { top: 50, right: 0, bottom: 100, left: 190 },
             // TODO: do not hardcode height and width values
               width = 960 - margin.left - margin.right,
-              height = 390 - margin.top - margin.bottom,
+              height = 500 - margin.top - margin.bottom,
               gridSize = Math.floor(width / 24),
-              gridHeight = 1.5 * gridSize,
+              gridHeight = 1.7 * gridSize,
               gridWidth = 3 * gridSize,
-              legendElementWidth = gridSize*3,
-              buckets = 9,
-              colors = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
-              expectations = ["ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
-              times = [ "< <$A>", "<$A> < <$B>", "<$B> < <$C>", "<$C> < <$D>", "<$D> < <$E>", "<$E>+"];
+              legendElementWidth = gridWidth,
+              colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
+              expectations = ["ISCED L2", "ISCED L3B", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+              qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+              income = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
 
             var svg = d3.select(".chartBackdrop").append("svg")
               .attr("width", 100 + "%")
@@ -45,20 +47,20 @@ angular.module('pisaVisualisationApp')
               .attr("y", -(margin.top / 2))
               .attr("text-anchor", "middle")
               .style("font-size", "16px")
-              .text("Parent's Income");
+              .text("Parent's Income (Dollars)");
 
             // Y Axis Title
             svg.append("text")
-              .attr("x", 0)
+              .attr("x", 20)
               .attr("y", height/2)
               .attr("text-anchor", "end")
               .style("font-size", "16px")
-              .attr("transform", "rotate(270, " + (-margin.left + 20) + "," + (height/2) +  ")")
-              .text("Parent's Expectations");
+              .attr("transform", "rotate(270, " + (-margin.left + 90) + "," + (height/2) +  ")")
+              .text("Parent's Expectations (Education Lvl)");
 
-            // X Axis
+            // X Axis Labels
             var timeLabels = svg.selectAll(".timeLabel")
-              .data(times)
+              .data(income)
               .enter().append("text")
               .text(function(d) { return d; })
               .attr("x", function(d, i) { return i * (gridWidth); })
@@ -66,7 +68,7 @@ angular.module('pisaVisualisationApp')
               .style("text-anchor", "middle")
               .attr("transform", "translate(" + gridSize + ", -6)");
 
-            // Y Axis
+            // Y Axis Labels
             var dayLabels = svg.selectAll(".dayLabel")
               .data(expectations)
               .enter().append("text")
@@ -77,17 +79,25 @@ angular.module('pisaVisualisationApp')
               .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
             // Heat Map
-            var heatmapChart = function(tsvFile) {
-              d3.tsv(tsvFile, function(d) {
+            var heatmapChart = function(fileName) {
+              d3.csv(fileName, function(d) {
                 return {
-                  expectation: + d.expectation,
-                  salary: + d.salary,
-                  frequency: + d.frequency
+                  expectation: preprocessorHelper.getIndexFromParentExpectations(d.expectation),
+                  salary: preprocessorHelper.getIndexFromParentExpectations(d.salary),
+                  frequency: parseInt(d.frequency)
                 };
               },  function(error, data) {
+
+                // Min and Max
+                var minFreq = d3.min(data, function (d) {
+                  return d.frequency;
+                }), maxFreq = d3.max(data, function (d) {
+                  return d.frequency;
+                });
+
                 var colorScale = d3.scale.quantile()
-                  .domain([0, buckets - 1, d3.max(data, function (d) { return d.frequency; })])
-                  .range(colors);
+                  .domain([minFreq, maxFreq])
+                  .range(colours);
 
                 var heatRects = svg.selectAll(".hour")
                   .data(data, function(d) {return d.expectation +':'+d.salary;});
@@ -114,10 +124,12 @@ angular.module('pisaVisualisationApp')
                   .attr("class", "hour bordered")
                   .attr("width", gridWidth)
                   .attr("height", gridHeight)
-                  .attr("background-color", colors[0])
+                  .attr("background-color", colours[0])
                   .on("mouseover", function(d, i) {
                     d3.select(this).classed('selected', true);
-                    tooltip.text("This is a test");
+
+                    var popUpText = "Frequency:" + d.frequency;
+                    tooltip.text(popUpText);
                     tooltip.style("visibility", "visible");
                   })
                   .on("mousemove", function() {
@@ -131,11 +143,8 @@ angular.module('pisaVisualisationApp')
                 heatRects.transition().duration(1000)
                   .transition().ease("elastic")
                   .attr("fill", function(d) { return colorScale(d.frequency); });
-
                 heatRects.select("title").text(function(d) { return d.frequency; });
-
                 heatRects.exit().remove();
-
 
                 // Draw legend
                 var legend = svg.selectAll(".legend")
@@ -149,7 +158,7 @@ angular.module('pisaVisualisationApp')
                   .attr("y", height)
                   .attr("width", legendElementWidth)
                   .attr("height", gridSize / 2)
-                  .attr("fill", function(d, i) { return colors[i]; });
+                  .attr("fill", function(d, i) { return colours[i]; });
 
                 legend.append("text")
                   .attr("class", "mono")
@@ -158,7 +167,6 @@ angular.module('pisaVisualisationApp')
                   .attr("y", height + gridSize);
 
                 legend.exit().remove();
-
               });
             };
 

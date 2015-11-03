@@ -64,12 +64,6 @@ angular.module('pisaVisualisationApp')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
           var rect = null;
 
-          function addTo(array, arrayIndex, question, data, answer) {
-            if (data[question] === answer) {
-              array[arrayIndex]++;
-            }
-          };
-
           scope.$watch('data', function(fileName) {
             if(!fileName){ return; }
 
@@ -127,6 +121,11 @@ angular.module('pisaVisualisationApp')
               });
 
               axisWidth = itemSize * ((dateExtent[1]) - (dateExtent[0]) + 1);
+
+              //xAxis = d3.svg.axis()
+              //  .orient('top')
+              //  .ticks(d3.time.days, 3)
+              //  .tickFormat(monthDayFormat);
 
               //TODO: AXIS
               //render axises

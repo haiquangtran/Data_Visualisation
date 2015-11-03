@@ -5,16 +5,9 @@ rect.bordered {
 
 text.mono {
   font-size: 9pt;
-  font-family: Consolas, courier;
+  /*font-family: Consolas, courier;*/
+  font-family: inherit;
   color: black;
-}
-
-text.axis-workweek {
-  fill: #000;
-}
-
-text.axis-worktime {
-  fill: #000;
 }
 
 .selected {
