@@ -19,9 +19,6 @@ angular.module('pisaVisualisationApp')
             if (!fileName) {
               return;
             }
-            console.log(element);
-            console.log(element[0].nextElementSibling);
-            console.log(element[0].offsetWidth);
             var margin = { top: 50, right: 0, bottom: 100, left: 190 },
             // TODO: do not hardcode height and width values
               width = 960 - margin.left - margin.right,
@@ -104,7 +101,24 @@ angular.module('pisaVisualisationApp')
 
                 heatRects.append("title");
 
-                // tool  tip
+                // Heat map rects
+                heatRects.enter().append("rect")
+                  .attr("x", function(d) { return (d.salary) * gridWidth; })
+                  .attr("y", function(d) { return (d.expectation) * gridHeight; })
+                  .attr("rx", 4)
+                  .attr("ry", 4)
+                  .attr("class", "bordered")
+                  .attr("width", gridWidth)
+                  .attr("height", gridHeight)
+                  .attr("background-color", colours[0]);
+
+                heatRects.transition().duration(1000)
+                  .transition().ease("elastic")
+                  .attr("fill", function(d) { return colorScale(d.frequency); });
+                heatRects.select("title").text(function(d) { return d.frequency; });
+                heatRects.exit().remove();
+
+                // Tool Tip
                 var tooltip = d3.select("body")
                   .append("div")
                   .style("position", "absolute")
@@ -115,36 +129,20 @@ angular.module('pisaVisualisationApp')
                   .style("background", "rgba(255,255, 255,0.8)")
                   .style("text-align", "center");
 
-                // Heat map rects
-                heatRects.enter().append("rect")
-                  .attr("x", function(d) { return (d.salary - 1) * gridWidth; })
-                  .attr("y", function(d) { return (d.expectation - 1) * gridHeight; })
-                  .attr("rx", 4)
-                  .attr("ry", 4)
-                  .attr("class", "hour bordered")
-                  .attr("width", gridWidth)
-                  .attr("height", gridHeight)
-                  .attr("background-color", colours[0])
-                  .on("mouseover", function(d, i) {
-                    d3.select(this).classed('selected', true);
+                // Hover
+                heatRects.on("mouseover", function(d, i) {
+                  d3.select(this).classed('selected', true);
 
-                    var popUpText = "Frequency:" + d.frequency;
-                    tooltip.text(popUpText);
-                    tooltip.style("visibility", "visible");
-                  })
-                  .on("mousemove", function() {
-                    return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-                  })
-                  .on("mouseout", function(d, i) {
-                    d3.select(this).classed('selected', false);
-                    tooltip.style("visibility", "hidden");
-                  });
-
-                heatRects.transition().duration(1000)
-                  .transition().ease("elastic")
-                  .attr("fill", function(d) { return colorScale(d.frequency); });
-                heatRects.select("title").text(function(d) { return d.frequency; });
-                heatRects.exit().remove();
+                  // Hover Text
+                  var popUpText = "Frequency:" + d.frequency;
+                  tooltip.text(popUpText);
+                  tooltip.style("visibility", "visible");
+                }).on("mousemove", function() {
+                  return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                }).on("mouseout", function(d, i) {
+                  d3.select(this).classed('selected', false);
+                  tooltip.style("visibility", "hidden");
+                });
 
                 // Draw legend
                 var legend = svg.selectAll(".legend")

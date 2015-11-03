@@ -1,6 +1,6 @@
 rect.bordered {
   stroke: #E6E6E6;
-  stroke-width:2px;
+  stroke-width: 3px;
 }
 
 text.mono {
@@ -10,6 +10,6 @@ text.mono {
   color: black;
 }
 
-.selected {
-  fill: blue;
+rect.selected {
+  fill: yellow;
 }

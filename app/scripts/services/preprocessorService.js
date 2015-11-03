@@ -20,17 +20,17 @@ angular.module('pisaVisualisationApp')
      */
     function getIndexFromParentExpectations(stringData) {
       if (stringData === "ISCED lv2" || stringData === "Less than <$A>") {
-        return parseInt(1);
+        return parseInt(0);
       } else if (stringData === "ISCED lv3B,C" || stringData === "<$A> or more but less than <$B>") {
-        return parseInt(2);
+        return parseInt(1);
       } else if (stringData === "ISCED lv3A" || stringData === "<$B> or more but less than <$C>") {
-        return parseInt(3);
+        return parseInt(2);
       } else if (stringData === "ISCED lv4" || stringData === "<$C> or more but less than <$D>") {
-        return parseInt(4);
+        return parseInt(3);
       } else if (stringData === "ISCED lv5B" || stringData === "<$D> or more but less than <$E>") {
-        return parseInt(5);
+        return parseInt(4);
       } else if (stringData === "ISCED lv5A,6" || stringData === "<$E> or more") {
-        return parseInt(6);
+        return parseInt(5);
       }
     }
 
