@@ -73,6 +73,19 @@ angular.module('pisaVisualisationApp')
 
                 heatRects.append("title");
 
+
+                //tool  tip
+                var tooltip = d3.select("body")
+                  .append("div")
+                  .style("position", "absolute")
+                  .style("z-index", "1")
+                  .style("visibility", "hidden")
+                  .style("width", "200px")
+                  .style("height", "100px")
+                  .style("background", "rgba(255,255, 255,0.8)")
+                  .style("text-align", "center");
+
+                // Heat map rects
                 heatRects.enter().append("rect")
                   .attr("x", function(d) { return (d.salary - 1) * gridSize*3; })
                   .attr("y", function(d) { return (d.expectation - 1) * gridSize; })
@@ -81,11 +94,23 @@ angular.module('pisaVisualisationApp')
                   .attr("class", "hour bordered")
                   .attr("width", gridSize*3)
                   .attr("height", gridSize)
-                  .style("fill", colors[0]);
+                  .attr("background-color", colors[0])
+                  .on("mouseover", function(d, i) {
+                    d3.select(this).classed('selected', true);
+                    tooltip.text("This is a test");
+                    tooltip.style("visibility", "visible");
+                  })
+                  .on("mousemove", function() {
+                    return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                  })
+                  .on("mouseout", function(d, i) {
+                    d3.select(this).classed('selected', false);
+                    tooltip.style("visibility", "hidden");
+                  });
 
                 heatRects.transition().duration(1000)
                   .transition().ease("elastic")
-                  .style("fill", function(d) { return colorScale(d.frequency); });
+                  .attr("fill", function(d) { return colorScale(d.frequency); });
 
                 heatRects.select("title").text(function(d) { return d.frequency; });
 
@@ -104,7 +129,7 @@ angular.module('pisaVisualisationApp')
                   .attr("y", height)
                   .attr("width", legendElementWidth)
                   .attr("height", gridSize / 2)
-                  .style("fill", function(d, i) { return colors[i]; });
+                  .attr("fill", function(d, i) { return colors[i]; });
 
                 legend.append("text")
                   .attr("class", "mono")
