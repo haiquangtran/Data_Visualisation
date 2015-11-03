@@ -87,6 +87,8 @@ body {
   height: 570px;
   overflow: hidden;
   display: block;
+  position: relative;
+  /*z-index: 50;*/
 }
 
 .parallax .small-info {
@@ -176,7 +178,9 @@ body {
   text-transform: uppercase;
   z-index: 3;
   margin: 0 auto;
-  top: 20%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Responsive Design */
