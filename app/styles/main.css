@@ -34,7 +34,8 @@ body {
 .header .nav,
 .header .nav li,
 .header .nav li a,
-.header .navbar-brand {
+.header .navbar-brand,
+.navbar-default .navbar-brand:focus {
   color: white;
 }
 

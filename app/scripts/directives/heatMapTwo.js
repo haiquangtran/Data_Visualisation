@@ -20,27 +20,48 @@ angular.module('pisaVisualisationApp')
               return;
             }
 
-            var margin = { top: 50, right: 0, bottom: 100, left: 90 },
+            var margin = { top: 50, right: 0, bottom: 100, left: 120 },
+            // TODO: do not hardcode height and width values
               width = 960 - margin.left - margin.right,
-              height = 320 - margin.top - margin.bottom,
+              height = 390 - margin.top - margin.bottom,
               gridSize = Math.floor(width / 24),
+              gridHeight = 1.5 * gridSize,
+              gridWidth = 3 * gridSize,
               legendElementWidth = gridSize*3,
               buckets = 9,
               colors = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
               expectations = ["ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
               times = [ "< <$A>", "<$A> < <$B>", "<$B> < <$C>", "<$C> < <$D>", "<$D> < <$E>", "<$E>+"];
+
             var svg = d3.select(".chartBackdrop").append("svg")
-              .attr("width", width + margin.left + margin.right + "%")
+              .attr("width", 100 + "%")
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            // X Axis Title
+            svg.append("text")
+              .attr("x", (width / 2) - 120)
+              .attr("y", -(margin.top / 2))
+              .attr("text-anchor", "middle")
+              .style("font-size", "16px")
+              .text("Parent's Income");
+
+            // Y Axis Title
+            svg.append("text")
+              .attr("x", 0)
+              .attr("y", height/2)
+              .attr("text-anchor", "end")
+              .style("font-size", "16px")
+              .attr("transform", "rotate(270, " + (-margin.left + 20) + "," + (height/2) +  ")")
+              .text("Parent's Expectations");
 
             // X Axis
             var timeLabels = svg.selectAll(".timeLabel")
               .data(times)
               .enter().append("text")
               .text(function(d) { return d; })
-              .attr("x", function(d, i) { return i * (gridSize*3); })
+              .attr("x", function(d, i) { return i * (gridWidth); })
               .attr("y", 0)
               .style("text-anchor", "middle")
               .attr("transform", "translate(" + gridSize + ", -6)");
@@ -51,9 +72,9 @@ angular.module('pisaVisualisationApp')
               .enter().append("text")
               .text(function (d) { return d; })
               .attr("x", 0)
-              .attr("y", function (d, i) { return i * gridSize; })
+              .attr("y", function (d, i) { return i * gridHeight; })
               .style("text-anchor", "end")
-              .attr("transform", "translate(-6," + gridSize / 1.5 + ")");
+              .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
             // Heat Map
             var heatmapChart = function(tsvFile) {
@@ -73,8 +94,7 @@ angular.module('pisaVisualisationApp')
 
                 heatRects.append("title");
 
-
-                //tool  tip
+                // tool  tip
                 var tooltip = d3.select("body")
                   .append("div")
                   .style("position", "absolute")
@@ -87,13 +107,13 @@ angular.module('pisaVisualisationApp')
 
                 // Heat map rects
                 heatRects.enter().append("rect")
-                  .attr("x", function(d) { return (d.salary - 1) * gridSize*3; })
-                  .attr("y", function(d) { return (d.expectation - 1) * gridSize; })
+                  .attr("x", function(d) { return (d.salary - 1) * gridWidth; })
+                  .attr("y", function(d) { return (d.expectation - 1) * gridHeight; })
                   .attr("rx", 4)
                   .attr("ry", 4)
                   .attr("class", "hour bordered")
-                  .attr("width", gridSize*3)
-                  .attr("height", gridSize)
+                  .attr("width", gridWidth)
+                  .attr("height", gridHeight)
                   .attr("background-color", colors[0])
                   .on("mouseover", function(d, i) {
                     d3.select(this).classed('selected', true);
@@ -133,7 +153,6 @@ angular.module('pisaVisualisationApp')
 
                 legend.append("text")
                   .attr("class", "mono")
-
                   .text(function(d) { return "≥ " + Math.round(d); })
                   .attr("x", function(d, i) { return legendElementWidth * i; })
                   .attr("y", height + gridSize);
