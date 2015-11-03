@@ -4,10 +4,9 @@
 
 <div ng-app="pisaVisualisationApp" ng-controller="Vis4Ctrl">
   <div class="chartBackdrop">
-    <heat-map-two chart-data="heatData"></heat-map-two>
+    <heat-map-two chart-data="parentExpectationsFile"></heat-map-two>
+    <vertical-bar-chart chart-data="parentExpectationsFile"></vertical-bar-chart>
+    <vertical-bar-chart chart-data="parentExpectationsFile"></vertical-bar-chart>
   </div>
-  <div class="chartBackdrop">
-    <vertical-bar-chart chart-data="barData"></vertical-bar-chart>
-  </div>
-  <button ng-click="setDataset()"> Dataset </button>
+  <!--<button ng-click="setDataset()"> Dataset </button>-->
 </div>

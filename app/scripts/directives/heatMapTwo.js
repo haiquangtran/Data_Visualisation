@@ -22,10 +22,10 @@ angular.module('pisaVisualisationApp')
             var margin = { top: 50, right: 0, bottom: 100, left: 190 },
             // TODO: do not hardcode height and width values
               width = 960 - margin.left - margin.right,
-              height = 500 - margin.top - margin.bottom,
+              height = 450 - margin.top - margin.bottom,
               gridSize = Math.floor(width / 24),
-              gridHeight = 1.7 * gridSize,
-              gridWidth = 3 * gridSize,
+              gridHeight = 1.4 * gridSize,
+              gridWidth = 3.5 * gridSize,
               legendElementWidth = gridWidth,
               colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
               expectations = ["ISCED L2", "ISCED L3B", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
@@ -83,7 +83,7 @@ angular.module('pisaVisualisationApp')
                   salary: preprocessorHelper.getIndexFromParentExpectations(d.salary),
                   frequency: parseInt(d.frequency)
                 };
-              },  function(error, data) {
+              }, function(error, data) {
 
                 // Min and Max
                 var minFreq = d3.min(data, function (d) {
