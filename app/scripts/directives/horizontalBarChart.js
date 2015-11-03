@@ -73,16 +73,16 @@ angular.module('pisaVisualisationApp')
 
                 return d;
               });
-
-              console.log("qualifications " + qualifications);
-              console.log("salary " + salary);
-              console.log("expectations " + expectations);
-              console.log("heatmap " + heatMap);
+              //
+              //console.log("qualifications " + qualifications);
+              //console.log("salary " + salary);
+              //console.log("expectations " + expectations);
+              //console.log("heatmap " + heatMap);
 
               var graphQualifications = d3.select(element[0]);
 
               // Frequency of parents qualifications
-              graphQualifications.append("div").attr("class", "chartBackdrop")
+              graphQualifications.append("div").attr("class", "backDrop")
                 .selectAll('div')
                 .data(qualifications).enter().append("div")
                 .transition().ease("elastic")
@@ -95,7 +95,7 @@ angular.module('pisaVisualisationApp')
 
               // Frequency of parents expectations
               graphExpectations.append("div")
-                .attr("class", "chartBackdrop")
+                .attr("class", "backDrop")
                 .selectAll('div')
                 .data(expectations).enter().append("div")
                 .transition().ease("elastic")
@@ -108,7 +108,7 @@ angular.module('pisaVisualisationApp')
 
               // Frequency of parents salary
               graphSalary.append("div")
-                .attr("class", "chartBackdrop")
+                .attr("class", "backDrop")
                 .selectAll('div')
                 .data(salary).enter().append("div")
                 .transition().ease("elastic")
