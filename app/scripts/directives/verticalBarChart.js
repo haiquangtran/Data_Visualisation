@@ -45,12 +45,15 @@ angular.module('pisaVisualisationApp')
                 return {
                   expectation: d.expectation,
                   salary: d.salary,
-                  frequency: parseInt(d.frequency)
+                  motherQualification: d.motherQualification,
+                  motherFrequency: parseInt(d.motherFrequency),
+                  fatherQualification: d.fatherQualification,
+                  fatherFrequency: parseInt(d.fatherFrequency)
                 };
               }, function(error, data) {
 
-                x.domain(data.map(function(d) { return d.frequency; }));
-                y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+                x.domain(data.map(function(d) { return d.motherFrequency+d.fatherFrequency; }));
+                y.domain([0, d3.max(data, function(d) { return d.motherFrequency+d.fatherFrequency; })]);
 
                 //Create SVG element
                 var svg = d3.select(".chartBackdrop").append("svg")
@@ -89,11 +92,11 @@ angular.module('pisaVisualisationApp')
                 bars.attr("x", function(d, i) {
                   return margin.left + barWidth * (i);
                 }).attr("y", function(d) {
-                  return height - (d.frequency/10);
+                  return height - (d.motherFrequency+d.fatherFrequency/10);
                 }).attr("width", barWidth)
                   .transition().ease("elastic")
                   .attr("height", function(d) {
-                    return (d.frequency/10);
+                    return (d.motherFrequency+d.fatherFrequency/10);
                   })
                   .attr("fill", function(d,i) {
                     return colours[i % colours.length];
@@ -115,7 +118,7 @@ angular.module('pisaVisualisationApp')
                 bars.on("mouseover", function(d, i) {
                   d3.select(this).classed('selected', true);
                   // Hover Text
-                  var popUpText = "Frequency:" + d.frequency + " Parent's Income: " + d.salary + " Parent's Expectations: " + d.expectation;
+                  var popUpText = "Frequency:" + d.motherFrequency+d.fatherFrequency + " Parent's Income: " + d.salary + " Parent's Expectations: " + d.expectation;
                   tooltip.text(popUpText);
                   tooltip.style("visibility", "visible");
                 }).on("mousemove", function() {

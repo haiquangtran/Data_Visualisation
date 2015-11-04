@@ -51,8 +51,8 @@ angular.module('pisaVisualisationApp')
       return dir + "total_parents_expectations.csv";
     }
 
-    function getTotalParentsQualifications() {
-
+    function getFileNameTotalParentsQualifications() {
+      return dir + "total_parents_qualifications.csv"
     }
     // Public API here
     return {
@@ -64,7 +64,8 @@ angular.module('pisaVisualisationApp')
       getFileNameParents: getFileNameParents(),
       getFileNameParentsExpectations: getFileNameParentsExpectations(),
       getFileNameHeatMap: getFileNameHeatMap(),
-      getFileNameTotalParentsExpectations: getFileNameTotalParentsExpectations()
+      getFileNameTotalParentsExpectations: getFileNameTotalParentsExpectations(),
+      getFileNameTotalParentsQualifications: getFileNameTotalParentsQualifications()
     };
   });
 
