@@ -16,6 +16,13 @@ angular.module('pisaVisualisationApp')
       }
     }
 
+    function doesQuestionMatchAnswer(question, data, answer) {
+      if (data[question] === answer) {
+        return true;
+      }
+      return false;
+    }
+
     function addToExpectations(array, data, answer) {
       if (data["PA19Q06"] === answer) {
         array[5]++;
@@ -81,6 +88,8 @@ angular.module('pisaVisualisationApp')
       }
     }
 
+
+
     // Public API here
     return {
       // HELPERS
@@ -93,6 +102,9 @@ angular.module('pisaVisualisationApp')
       },
       addToHeatMap: function(array, data, answer) {
         return addToHeatMap(array, data, answer);
+      },
+      doesQuestionMatchAnswer: function(question, data, answer) {
+        return doesQuestionMatchAnswer(question, data, answer);
       }
     };
   });

@@ -21,7 +21,9 @@ angular.module('pisaVisualisationApp')
             }
 
             // Parent's expectations
-            var qualifications = [0,0,0,0, 0,0,0,0];
+            var fatherQualifications = [0,0,0,0];
+            var motherQualifications = [0,0,0,0];
+
             var salary = [0,0,0,0,0,0];
             var expectations = [0,0,0,0,0,0];
             var heatMap =
@@ -39,16 +41,25 @@ angular.module('pisaVisualisationApp')
                 var answer = "Yes";
 
                 // Father
-                queryService.addTo(qualifications, 0, "PA03Q01", d, answer); //lv5A,6
-                queryService.addTo(qualifications, 1, "PA03Q02", d, answer); //lv 5B
-                queryService.addTo(qualifications, 2, "PA03Q03", d, answer); //lv 4
-                queryService.addTo(qualifications, 3, "PA03Q04", d, answer); //lv 3A
-
+                if (queryService.doesQuestionMatchAnswer("PA03Q04", d, answer)) {
+                  queryService.addTo(fatherQualifications, 3, "PA03Q04", d, answer); //lv 5B
+                } else if (queryService.doesQuestionMatchAnswer("PA03Q03", d, answer)) {
+                  queryService.addTo(fatherQualifications, 2, "PA03Q03", d, answer); //lv 5B
+                } else if (queryService.doesQuestionMatchAnswer("PA03Q02", d, answer)) {
+                  queryService.addTo(fatherQualifications, 1, "PA03Q02", d, answer); //lv 5B
+                } else if (queryService.doesQuestionMatchAnswer("PA03Q01", d, answer)) {
+                  queryService.addTo(fatherQualifications, 0, "PA03Q01", d, answer); //lv 5B
+                }
                 // Mothers
-                queryService.addTo(qualifications, 4, "PA05Q01", d, answer); //lv5A,6
-                queryService.addTo(qualifications, 5, "PA05Q02", d, answer); //lv 5B
-                queryService.addTo(qualifications, 6, "PA05Q03", d, answer); //lv 4
-                queryService.addTo(qualifications, 7, "PA05Q04", d, answer); //lv 3A
+                if (queryService.doesQuestionMatchAnswer("PA05Q04", d, answer)) {
+                  queryService.addTo(motherQualifications, 3, "PA05Q04", d, answer); //lv 5B
+                } else if (queryService.doesQuestionMatchAnswer("PA05Q03", d, answer)) {
+                  queryService.addTo(motherQualifications, 2, "PA05Q03", d, answer); //lv 5B
+                } else if (queryService.doesQuestionMatchAnswer("PA05Q02", d, answer)) {
+                  queryService.addTo(motherQualifications, 1, "PA05Q02", d, answer); //lv 5B
+                } else if (queryService.doesQuestionMatchAnswer("PA05Q01", d, answer)) {
+                  queryService.addTo(motherQualifications, 0, "PA05Q01", d, answer); //lv 5B
+                }
 
                 // Salary
                 queryService.addTo(salary, 0, "PA07Q01", d, "Less than <$A>");
@@ -74,17 +85,28 @@ angular.module('pisaVisualisationApp')
                 return d;
               });
               //
-              //console.log("qualifications " + qualifications);
-              //console.log("salary " + salary);
-              //console.log("expectations " + expectations);
-              //console.log("heatmap " + heatMap);
+
+              console.log("father qualifications " + fatherQualifications);
+              console.log("mother qualifications " + motherQualifications);
+              console.log("salary " + salary);
+              console.log("expectations " + expectations);
+              console.log("heatmap " + heatMap);
 
               var graphQualifications = d3.select(element[0]);
 
               // Frequency of parents qualifications
               graphQualifications.append("div").attr("class", "backDrop")
                 .selectAll('div')
-                .data(qualifications).enter().append("div")
+                .data(motherQualifications).enter().append("div")
+                .transition().ease("elastic")
+                .style("width", function(d) { return d/1000 + "%"; })
+                .style("background-color", function(d, i) { return "yellow";})
+                .style("color", "black")
+                .text(function(d) { return d + " freq"; });
+
+              graphQualifications.append("div").attr("class", "backDrop")
+                .selectAll('div')
+                .data(fatherQualifications).enter().append("div")
                 .transition().ease("elastic")
                 .style("width", function(d) { return d/1000 + "%"; })
                 .style("background-color", function(d, i) { return "yellow";})
