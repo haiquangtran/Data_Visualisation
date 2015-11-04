@@ -9,5 +9,5 @@
  */
 angular.module('pisaVisualisationApp')
   .controller('Vis1Ctrl', function ($scope, fileService) {
-    $scope.myData = fileService.getParentsExpectationsFileName;
+    $scope.myData = fileService.getFileNameParentsExpectations;
   });

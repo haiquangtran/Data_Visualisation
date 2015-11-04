@@ -26,9 +26,10 @@ angular.module('pisaVisualisationApp')
             var r = h/3;
             var colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
 
-            var pieData = [{"label":"Category A", "value":20},
-              {"label":"Category B", "value":50},
-              {"label":"Category C", "value":30}];
+            var pieData = [
+              {"label":"Father", "value":20},
+              {"label":"Mother", "value":30}
+            ];
 
             var pieChart = function(fileName) {
               d3.csv(fileName, function(d) {

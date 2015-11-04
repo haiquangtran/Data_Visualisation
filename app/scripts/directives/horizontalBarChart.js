@@ -21,8 +21,8 @@ angular.module('pisaVisualisationApp')
             }
 
             // Parent's expectations
-            var fatherQualifications = [0,0,0,0];
-            var motherQualifications = [0,0,0,0];
+            var fatherQualifications = [0,0,0,0,0]; // None, lv3, lv4, lv5B, lv5A,B
+            var motherQualifications = [0,0,0,0,0];
 
             var salary = [0,0,0,0,0,0];
             var expectations = [0,0,0,0,0,0];
@@ -34,31 +34,81 @@ angular.module('pisaVisualisationApp')
                 0,0,0,0,0,0, // lv5B
                 0,0,0,0,0,0 ]; // lv5A, or 6
 
+            //var results = [
+            //  {
+            //    // expectation
+            //    "ISCED lv2":  {
+            //      //salary
+            //      "Less than <$A>": {
+            //        // Qualifications
+            //        "motherQualification": {
+            //          // HIGHEST levels of completion
+            //          "none": 5,
+            //          "ISCED 3A": 5,
+            //          "ISCED 4": 0,
+            //          "ISCED 5B": 0,
+            //          "ISCED 5A,6": 0
+            //        },
+            //        "fatherQualification": {
+            //          // HIGHEST levels of completion
+            //          "none": 5,
+            //          "ISCED 3A": 5,
+            //          "ISCED 4": 0,
+            //          "ISCED 5B": 0,
+            //          "ISCED 5A,6": 0
+            //        }
+            //      },
+            //      "<$A> or more but less than <$B>": {},
+            //      "<$B> or more but less than <$C>": {},
+            //      "<$C> or more but less than <$D>": {},
+            //      "<$D> or more but less than <$E>": {},
+            //      "<$E> or more": {}
+            //    }
+            //  }
+            //];
+
+            var answer = "Yes";
+
             var colourScheme = ["#A0CAA0", "#66C266", "#007A00", "#005C00"];
 
             d3.csv(fileName, function (data) {
               data.forEach(function (d) {
-                var answer = "Yes";
 
-                // Father
+                // Father qualifications
                 if (queryService.doesQuestionMatchAnswer("PA03Q04", d, answer)) {
-                  queryService.addTo(fatherQualifications, 3, "PA03Q04", d, answer); //lv 5B
+                  queryService.addTo(fatherQualifications, 4, "PA03Q04", d, answer);
                 } else if (queryService.doesQuestionMatchAnswer("PA03Q03", d, answer)) {
-                  queryService.addTo(fatherQualifications, 2, "PA03Q03", d, answer); //lv 5B
+                  queryService.addTo(fatherQualifications, 3, "PA03Q03", d, answer);
                 } else if (queryService.doesQuestionMatchAnswer("PA03Q02", d, answer)) {
-                  queryService.addTo(fatherQualifications, 1, "PA03Q02", d, answer); //lv 5B
+                  queryService.addTo(fatherQualifications, 2, "PA03Q02", d, answer);
                 } else if (queryService.doesQuestionMatchAnswer("PA03Q01", d, answer)) {
-                  queryService.addTo(fatherQualifications, 0, "PA03Q01", d, answer); //lv 5B
+                  queryService.addTo(fatherQualifications, 1, "PA03Q01", d, answer);
+                } else {
+                  var no = "No";
+                  if (queryService.doesQuestionMatchAnswer("PA03Q04", d, no)
+                    || queryService.doesQuestionMatchAnswer("PA03Q03", d, no)
+                    || queryService.doesQuestionMatchAnswer("PA03Q02", d, no)
+                    || queryService.doesQuestionMatchAnswer("PA03Q01", d, no)) {
+                    fatherQualifications[0]++;
+                  }
                 }
-                // Mothers
+                // Mothers qualifications
                 if (queryService.doesQuestionMatchAnswer("PA05Q04", d, answer)) {
-                  queryService.addTo(motherQualifications, 3, "PA05Q04", d, answer); //lv 5B
+                  queryService.addTo(motherQualifications, 4, "PA05Q04", d, answer);
                 } else if (queryService.doesQuestionMatchAnswer("PA05Q03", d, answer)) {
-                  queryService.addTo(motherQualifications, 2, "PA05Q03", d, answer); //lv 5B
+                  queryService.addTo(motherQualifications, 3, "PA05Q03", d, answer);
                 } else if (queryService.doesQuestionMatchAnswer("PA05Q02", d, answer)) {
-                  queryService.addTo(motherQualifications, 1, "PA05Q02", d, answer); //lv 5B
+                  queryService.addTo(motherQualifications, 2, "PA05Q02", d, answer);
                 } else if (queryService.doesQuestionMatchAnswer("PA05Q01", d, answer)) {
-                  queryService.addTo(motherQualifications, 0, "PA05Q01", d, answer); //lv 5B
+                  queryService.addTo(motherQualifications, 1, "PA05Q01", d, answer);
+                } else {
+                  var no = "No";
+                  if (queryService.doesQuestionMatchAnswer("PA05Q04", d, no)
+                    || queryService.doesQuestionMatchAnswer("PA05Q03", d, no)
+                    || queryService.doesQuestionMatchAnswer("PA05Q02", d, no)
+                    || queryService.doesQuestionMatchAnswer("PA05Q01", d, no)) {
+                    motherQualifications[0]++;
+                  }
                 }
 
                 // Salary
@@ -86,11 +136,32 @@ angular.module('pisaVisualisationApp')
               });
               //
 
-              console.log("father qualifications " + fatherQualifications);
-              console.log("mother qualifications " + motherQualifications);
-              console.log("salary " + salary);
-              console.log("expectations " + expectations);
-              console.log("heatmap " + heatMap);
+              //var results = queryService.getQualifications(data);
+              //console.log("father qualifications " + fatherQualifications);
+              //console.log("mother qualifications " + motherQualifications);
+              //console.log("salary " + salary);
+              //console.log("expectations " + expectations);
+              //console.log("heatmap " + heatMap);
+              //console.log("RESULTS: " + results);
+              //console.log("RESULTS SIZE " + results.length);
+
+              //var csvContent = "data:text/csv;charset=utf-8,";
+              //var indexCutPoint = 6;
+              //csvContent += "expectation,salary,motherQualification,motherFrequency,fatherQualification,fatherFrequency\n";
+              //results.forEach(function(test, index){
+              //  if ((index + 1) % indexCutPoint == 0) {
+              //    csvContent += test.toString().concat("\n");
+              //  } else {
+              //    csvContent += test.toString().concat(",");
+              //  }
+              //});
+
+              //var encodedUri = encodeURI(csvContent);
+              //var link = document.createElement("a");
+              //link.setAttribute("href", encodedUri);
+              //link.setAttribute("download", "total_parents_qualifications.csv");
+              //
+              //link.click(); // This will download the data file named "my_data.csv".
 
               var graphQualifications = d3.select(element[0]);
 
