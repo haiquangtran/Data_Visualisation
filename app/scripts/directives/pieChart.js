@@ -70,6 +70,29 @@ angular.module('pisaVisualisationApp')
                     return pieData[i].label;}
                 );
 
+                //tool  tip
+                var tooltip = d3.select("body")
+                  .append("div")
+                  .style("position", "absolute")
+                  .style("z-index", "10")
+                  .style("visibility", "hidden")
+                  .style("width", "200px")
+                  .style("height", "100px")
+                  .style("background", "rgba(255,255, 255,0.8)")
+                  .style("text-align", "center");
+                // Hover
+                arcs.on("mouseover", function(d, i) {
+                  d3.select(this).classed('selected', true);
+                  // Hover Text
+                  var popUpText = "Frequency:" + d.frequency;
+                  tooltip.text(popUpText);
+                  tooltip.style("visibility", "visible");
+                }).on("mousemove", function() {
+                  return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                }).on("mouseout", function(d, i) {
+                  d3.select(this).classed('selected', false);
+                  tooltip.style("visibility", "hidden");
+                });
 
               });
             };

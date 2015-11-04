@@ -10,7 +10,13 @@ text.mono {
   color: black;
 }
 
+/* Heat Map Selected */
 rect.selected {
+  fill: yellow;
+}
+
+/* Pie Chart Selected */
+g.slice.selected path {
   fill: yellow;
 }
 
