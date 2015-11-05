@@ -146,7 +146,6 @@ angular.module('pisaVisualisationApp')
 
           /**
            * Update barChart data.
-           * Triggered from onClick
            */
           function updateBarChart(fileName, selectedExpectation, selectedSalary) {
             // Get the data again

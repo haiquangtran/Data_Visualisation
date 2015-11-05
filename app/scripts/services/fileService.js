@@ -27,7 +27,7 @@ angular.module('pisaVisualisationApp')
     }
 
     function getFileNameParentsExpectations() {
-      return dir + "all_parents_expectations.csv"
+      return dir + "parents_expectations.csv"
     }
 
     function getFileNameTotalParentsExpectations() {
