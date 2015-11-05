@@ -12,24 +12,7 @@ angular.module('pisaVisualisationApp')
     var dir = "data/";
 
     /* Load Data from Files */
-
-    function loadFileMiserables() {
-      return $http.get(dir + 'miserables.json');
-    };
-
-    function loadFileHeatMap() {
-      return $http.get(dir + 'pm25.json');
-    }
-
-    function loadFileRaw() {
-      return $http.get(dir + 'raw_data.csv');
-    }
-
     /* Get the name of CSV files */
-
-    function getFileNameRaw() {
-      return dir + "raw_data.csv";
-    }
 
     function getFileNameParents() {
       return dir + "parent_answers.csv";
@@ -39,12 +22,12 @@ angular.module('pisaVisualisationApp')
       return dir + "students_answers.csv";
     }
 
-    function getFileNameParentsExpectations() {
+    function getFileNameAllParentsExpectations() {
       return dir + "all_parents_expectations.csv";
     }
 
-    function getFileNameHeatMap() {
-      return dir + "pm25.json";
+    function getFileNameParentsExpectations() {
+      return dir + "all_parents_expectations.csv"
     }
 
     function getFileNameTotalParentsExpectations() {
@@ -54,18 +37,15 @@ angular.module('pisaVisualisationApp')
     function getFileNameTotalParentsQualifications() {
       return dir + "total_parents_qualifications.csv"
     }
+
     // Public API here
     return {
-      getForceMapData: loadFileMiserables(),
-      getHeatMapData: loadFileHeatMap(),
-      getStackedBarData: loadFileRaw(),
-      getFileNameRaw: getFileNameRaw(),
       getFileNameStudents: getFileNameStudents(),
       getFileNameParents: getFileNameParents(),
-      getFileNameParentsExpectations: getFileNameParentsExpectations(),
-      getFileNameHeatMap: getFileNameHeatMap(),
+      getFileNameAllParentsExpectations: getFileNameAllParentsExpectations(),
       getFileNameTotalParentsExpectations: getFileNameTotalParentsExpectations(),
-      getFileNameTotalParentsQualifications: getFileNameTotalParentsQualifications()
+      getFileNameTotalParentsQualifications: getFileNameTotalParentsQualifications(),
+      getFileNameParentsExpectations: getFileNameParentsExpectations()
     };
   });
 

@@ -103,7 +103,7 @@ angular.module('pisaVisualisationApp')
             }
 
             if (selectedSalary != oldValues[2] || selectedExpectation != oldValues[1]) {
-              pieChart(fileName, selectedExpectation, selectedSalary);
+              //pieChart(fileName, selectedExpectation, selectedSalary);
             } else {
               pieChart(fileName, selectedExpectation, selectedSalary);
             }

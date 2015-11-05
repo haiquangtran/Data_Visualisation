@@ -13,7 +13,8 @@ angular.module('pisaVisualisationApp')
     // Default values
     $scope.selectedSalary = "Less than <$A>";
     $scope.selectedExpectation = "ISCED lv2";
-    $scope.parentExpectationsFile = fileService.getFileNameTotalParentsExpectations;
+    $scope.parentTotalExpectationsFile = fileService.getFileNameTotalParentsExpectations;
+    $scope.parentExpectationsFile = fileService.getFileNameParentsExpectations;
 
 
     // Set selected values from heat map when button clicked
