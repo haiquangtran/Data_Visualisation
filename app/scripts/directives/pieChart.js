@@ -7,11 +7,16 @@
  * # pieChart
  */
 angular.module('pisaVisualisationApp')
-  .directive('pieChart', function (d3Service, toolTipService) {
+  .directive('pieChart', function (d3Service, toolTipService, preprocessorService) {
     return {
       restrict: 'E',
       replace: false,
-      scope: {data: '=chartData'},
+      scope: {
+        data: '=chartData',
+        // For filtering
+        selectedSalary: '=selectedSalary',
+        selectedExpectation: '=selectedExpectation'
+      },
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function(d3) {
 
@@ -21,25 +26,34 @@ angular.module('pisaVisualisationApp')
           var r = h/3;
           var colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
 
-          var pieData = [
-            {"label":"Father", "value":20},
-            {"label":"Mother", "value":30}
-          ];
-
-          scope.$watch('data', function(fileName) {
-            if (!fileName) {
-              return;
-            }
-
-            var pieChart = function(fileName) {
-              d3.csv(fileName, function(d) {
+          var pieChart = function(fileName, selectedExpectation, selectedSalary) {
+            d3.csv(fileName, function(d) {
+              // Filter
+              if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
                 return {
-                  expectation: d.expectation,
-                  salary: d.salary,
+                  expectation: preprocessorService.getIndexFromParentExpectations(d.expectation),
+                  salary: preprocessorService.getIndexFromParentExpectations(d.salary),
                   frequency: parseInt(d.frequency)
                 };
-              }, function(error, data) {
+              }
+            }, function(error, data) {
+              var fatherExpectations = d3.sum(data, function(d) {
+                return parseInt(d.frequency);
+              });
+              var total = d3.sum(data, function(d) {
+                return parseInt(d.fatherFrequency + d.motherFrequency);
+              });
+              console.log(selectedExpectation  + " " + selectedSalary);
 
+              console.log(total);
+              console.log(fatherExpectations);
+
+              var pieData = [
+                {"label":"Father", "value":20},
+                {"label":"Mother", "value":30}
+              ];
+
+              function createPieChart() {
                 var vis = d3.select(".chartBackdrop")
                   .append("svg:svg")
                   .attr("id", "pieCanvas")
@@ -69,17 +83,30 @@ angular.module('pisaVisualisationApp')
                   return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
                     return pieData[i].label;}
                 );
-
-                // Hover Text
+                // Add tool tip
                 toolTipService.addToolTip(arcs, function(d) {
-                  return "Frequency:" + d.frequency;
+                  return "Frequency:" + total + "  Mother:"+ d.motherFrequency + d.fatherFrequency + "  Father:";
                 });
+              }
 
-              });
-            };
+              createPieChart();
+            });
+          };
 
-            pieChart(fileName);
+          scope.$watchGroup(['data', 'selectedExpectation', 'selectedSalary'], function(newValues, oldValues, scope) {
+            var fileName = newValues[0];
+            var selectedExpectation = newValues[1];
+            var selectedSalary = newValues[2];
 
+            if (!fileName) {
+              return;
+            }
+
+            if (selectedSalary != oldValues[2] || selectedExpectation != oldValues[1]) {
+              pieChart(fileName, selectedExpectation, selectedSalary);
+            } else {
+              pieChart(fileName, selectedExpectation, selectedSalary);
+            }
           });
         });
       }

@@ -7,7 +7,7 @@
  * # heatMap
  */
 angular.module('pisaVisualisationApp')
-  .directive('heatMap', function (d3Service, preprocessorHelper) {
+  .directive('heatMap', function (d3Service, preprocessorService) {
     return {
       restrict: 'E',
       replace: false,
@@ -84,8 +84,8 @@ angular.module('pisaVisualisationApp')
             var heatmapChart = function(fileName) {
               d3.csv(fileName, function(d) {
                 return {
-                  expectation: preprocessorHelper.getIndexFromParentExpectations(d.expectation),
-                  salary: preprocessorHelper.getIndexFromParentExpectations(d.salary),
+                  expectation: preprocessorService.getIndexFromParentExpectations(d.expectation),
+                  salary: preprocessorService.getIndexFromParentExpectations(d.salary),
                   frequency: parseInt(d.frequency)
                 };
               }, function(error, data) {
@@ -147,8 +147,8 @@ angular.module('pisaVisualisationApp')
 
 
                   scope.onClickEvent({
-                    expectation: preprocessorHelper.getParentExpectationsFromIndex(d.expectation),
-                    salary: preprocessorHelper.getParentSalaryFromIndex(d.salary)
+                    expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
+                    salary: preprocessorService.getParentSalaryFromIndex(d.salary)
                   });
                 }).on("mousemove", function() {
                   return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
@@ -160,8 +160,8 @@ angular.module('pisaVisualisationApp')
                 // Selection
                 heatRects.on("click", function(d) {
                   scope.onClickEvent({
-                    expectation: preprocessorHelper.getParentExpectationsFromIndex(d.expectation),
-                    salary: preprocessorHelper.getParentSalaryFromIndex(d.salary)
+                    expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
+                    salary: preprocessorService.getParentSalaryFromIndex(d.salary)
                   });
                 });
 

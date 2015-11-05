@@ -53,14 +53,73 @@ angular.module('pisaVisualisationApp')
       var salaryIndex = getSalaryIndex(d);
       if (salaryIndex == null) { return; }
       var salaryNum = 6;
-      var salaryArray = ["PA19Q01", "PA19Q02", "PA19Q03", "PA19Q04", "PA19Q05", "PA19Q06"];
+      var expectationsArray = ["PA19Q01", "PA19Q02", "PA19Q03", "PA19Q04", "PA19Q05", "PA19Q06"];
 
-      for (var i = salaryArray.length; i >= 0; i--) {
-        if (d[salaryArray[i]] === answer) {
+      for (var i = expectationsArray.length; i >= 0; i--) {
+        if (d[expectationsArray[i]] === answer) {
           array[(i * salaryNum) + salaryIndex]++;
           return;
         }
       }
+    }
+
+    function getParentsExpectationsBasedOnSalary(data) {
+      // To create a csv file:
+      // expectation,salary,motherFrequency,fatherFrequency
+      var result = [];
+      var salaryAnswerArray = ["Less than <$A>", "<$A> or more but less than <$B>",
+        "<$B> or more but less than <$C>","<$C> or more but less than <$D>",
+        "<$D> or more but less than <$E>","<$E> or more"];
+      var expectationsArray = ["ISCED lv2", "ISCED lv3B,C", "ISCED lv3A", "ISCED lv4", "ISCED lv5B", "ISCED lv5A,6"];
+
+      // expectation
+      for (var i = 0; i < expectationsArray.length; i++) {
+        // salary
+        for (var j = 0; j < salaryAnswerArray.length; j++) {
+          // expectation
+          result.push(expectationsArray[i]);
+          // salary
+          result.push(salaryAnswerArray[j]);
+          // father freq
+          result.push(calculateExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "father"));
+          // mother freq
+          result.push(calculateExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "mother"));
+          // other freq
+          result.push(calculateExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "other"));
+        }
+      }
+      return result;
+    }
+
+    function calculateExpectationFrequency(data, expectationLevel, salaryAnswer, optionalParent) {
+      // mother, father, other
+      var parentQuestionsArray = ["PA01Q01", "PA01Q02", "PA01Q03"];
+      var parentOptions = ["mother", "father", "other"];
+      var tick = "Tick";
+
+      var parent = optionalParent.toLowerCase();
+      var frequency  = 0;
+      data.forEach(function(d) {
+
+        for (var i = 0; i < parentOptions.length; i++) {
+          if (parent === parentOptions[0]
+            || parent === parentOptions[1]
+            || parent === parentOptions[2]) {
+            if (parentOptions[i] === parent
+              && getHighestExpectationString(d) === expectationLevel
+              && d["PA07Q01"] === salaryAnswer
+              && d[parentQuestionsArray[i]] === tick) {
+              frequency++;
+            }
+          } else {
+            // Total overall
+            if (getHighestExpectationString(d) === expectationLevel && d["PA07Q01"] === salaryAnswer) {
+              frequency++;
+            }
+          }
+        }
+      });
+      return frequency;
     }
 
     /**
@@ -82,7 +141,6 @@ angular.module('pisaVisualisationApp')
      * @returns {*}
      */
     function getHighestQualificationString(qualificationsArray, d, answer) {
-
       // Start looking for highest qualification
       for (var i = qualificationsArray.length-1; i >= 0; i--) {
         if (doesQuestionMatchAnswer(qualificationsArray[i], d, answer)) {
@@ -116,7 +174,7 @@ angular.module('pisaVisualisationApp')
       var answer = "Yes";
       var frequency = 0;
 
-      data.forEach(function (d) {
+      data.forEach(function(d) {
         // Only look at matching salary and expectation
         if (getHighestExpectationString(d) === expectationQuestion && d["PA07Q01"] === salaryAnswer) {
           var highestQualification= getHighestQualificationString(qualificationsArray, d, answer);
@@ -146,22 +204,40 @@ angular.module('pisaVisualisationApp')
         for (var col = 0; col < salaryArray.length; col++) {
           // Mothers qualifications
           //for (var i = 0; i < qualificationAnswers.length; i++) {
-            // Fathers qualifications
-            for (var j = 0; j < qualificationAnswers.length; j++) {
-              //expectation, salary, mother qualification, father qualification
-              results.push(expectationsArray[row]);
-              results.push(salaryArray[col]);
-              // Mother
-              results.push(qualificationAnswers[j]);
-              results.push(calculateQualificationFrequency(data, expectationsArray[row], salaryArray[col], qualificationAnswers[j], motherQualificationsQuestions));
-              // Father
-              results.push(qualificationAnswers[j]);
-              results.push(calculateQualificationFrequency(data, expectationsArray[row], salaryArray[col], qualificationAnswers[j], fatherQualificationsQuestions));
+          // Fathers qualifications
+          for (var j = 0; j < qualificationAnswers.length; j++) {
+            //expectation, salary, mother qualification, father qualification
+            results.push(expectationsArray[row]);
+            results.push(salaryArray[col]);
+            // Mother
+            results.push(qualificationAnswers[j]);
+            results.push(calculateQualificationFrequency(data, expectationsArray[row], salaryArray[col], qualificationAnswers[j], motherQualificationsQuestions));
+            // Father
+            results.push(qualificationAnswers[j]);
+            results.push(calculateQualificationFrequency(data, expectationsArray[row], salaryArray[col], qualificationAnswers[j], fatherQualificationsQuestions));
             //}
           }
         }
       }
       return results;
+    }
+
+    function createCsvFile(results, outputFileName, headerInfo, indexCutPoint) {
+      var csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += headerInfo + "\n";
+      results.forEach(function(test, index){
+        if ((index + 1) % indexCutPoint == 0) {
+          csvContent += test.toString().concat("\n");
+        } else {
+          csvContent += test.toString().concat(",");
+        }
+      });
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", outputFileName + ".csv");
+
+      link.click(); // This will download the data file
     }
 
     // Public API here
@@ -182,6 +258,12 @@ angular.module('pisaVisualisationApp')
       },
       getQualifications: function(data) {
         return getQualifications(data);
+      },
+      getParentsExpectationsBasedOnSalary: function(data) {
+        return getParentsExpectationsBasedOnSalary(data);
+      },
+      createCSVFile: function(results, outputFileName, headerInfo, indexCutPoint) {
+        return createCsvFile(results, outputFileName, headerInfo, indexCutPoint);
       }
     };
   });

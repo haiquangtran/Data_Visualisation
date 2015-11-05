@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc service
- * @name pisaVisualisationApp.preprocessorHelper
+ * @name pisaVisualisationApp.preprocessorService
  * @description
- * # preprocessorHelper
+ * # preprocessorService
  * Factory in the pisaVisualisationApp.
  */
 angular.module('pisaVisualisationApp')
-  .factory('preprocessorHelper', function () {
+  .factory('preprocessorService', function () {
 
     /**
      * Heat map helper

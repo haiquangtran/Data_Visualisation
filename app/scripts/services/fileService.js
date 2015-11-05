@@ -40,7 +40,7 @@ angular.module('pisaVisualisationApp')
     }
 
     function getFileNameParentsExpectations() {
-      return dir + "parents_expectations.csv";
+      return dir + "all_parents_expectations.csv";
     }
 
     function getFileNameHeatMap() {

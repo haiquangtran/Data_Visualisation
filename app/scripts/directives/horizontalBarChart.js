@@ -134,36 +134,19 @@ angular.module('pisaVisualisationApp')
 
                 return d;
               });
-              //
 
+              //var results = queryService.getParentsExpectationsBasedOnSalary(data);
               //var results = queryService.getQualifications(data);
-              console.log("father qualifications " + fatherQualifications);
-              console.log("mother qualifications " + motherQualifications);
-              console.log("salary " + salary);
-              console.log("expectations " + expectations);
-              //console.log("heatmap " + heatMap);
+              //console.log("father qualifications " + fatherQualifications);
+              //console.log("mother qualifications " + motherQualifications);
+              //console.log("salary " + salary);
+              //console.log("total expectations " + expectations);
+              //console.log("expectations and salary " + heatMap);
               //console.log("RESULTS: " + results);
               //console.log("RESULTS SIZE " + results.length);
 
-              //var csvContent = "data:text/csv;charset=utf-8,";
-              //var indexCutPoint = 6;
-              //csvContent += "expectation,salary,motherQualification,motherFrequency,fatherQualification,fatherFrequency\n";
-              //results.forEach(function(test, index){
-              //  if ((index + 1) % indexCutPoint == 0) {
-              //    csvContent += test.toString().concat("\n");
-              //  } else {
-              //    csvContent += test.toString().concat(",");
-              //  }
-              //});
-
-              //var encodedUri = encodeURI(csvContent);
-              //var link = document.createElement("a");
-              //link.setAttribute("href", encodedUri);
-              //link.setAttribute("download", "total_parents_qualifications.csv");
-              //
-              //link.click(); // This will download the data file named "my_data.csv".
-
               var graphQualifications = d3.select(element[0]);
+
 
               // Frequency of parents qualifications
               graphQualifications.append("div").attr("class", "backDrop")
