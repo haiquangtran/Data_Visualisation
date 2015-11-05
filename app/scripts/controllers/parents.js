@@ -21,7 +21,5 @@ angular.module('pisaVisualisationApp')
       $scope.selectedSalary = salary;
       $scope.selectedExpectation = expectation;
       $scope.$apply();
-      console.log($scope.selectedSalary);
-      console.log($scope.selectedExpectation);
     }
   });

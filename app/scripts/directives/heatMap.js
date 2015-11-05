@@ -89,6 +89,10 @@ angular.module('pisaVisualisationApp')
                   frequency: parseInt(d.frequency)
                 };
               }, function(error, data) {
+                // total
+                var total = d3.sum(data, function(d) {
+                  return d.frequency;
+                });
                 // Min and Max
                 var minFreq = d3.min(data, function (d) {
                   return d.frequency;
@@ -140,6 +144,12 @@ angular.module('pisaVisualisationApp')
                   var popUpText = "Frequency:" + d.frequency;
                   tooltip.text(popUpText);
                   tooltip.style("visibility", "visible");
+
+
+                  scope.onClickEvent({
+                    expectation: preprocessorHelper.getParentExpectationsFromIndex(d.expectation),
+                    salary: preprocessorHelper.getParentSalaryFromIndex(d.salary)
+                  });
                 }).on("mousemove", function() {
                   return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
                 }).on("mouseout", function(d, i) {

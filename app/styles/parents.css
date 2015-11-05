@@ -16,11 +16,18 @@ rect.selected {
 }
 
 /* Pie Chart Selected */
+#pieCanvas {
+}
 g.slice.selected path {
   fill: yellow;
 }
 
 /* Bar Chart */
+#barCanvas {
+  position: relative;
+  float: left;
+}
+
 .axis {
   font: 10px sans-serif;
 }
@@ -57,3 +64,6 @@ g.slice.selected path {
   color: white;
   box-shadow: 2px 2px 2px #666;
 }
+
+
+
