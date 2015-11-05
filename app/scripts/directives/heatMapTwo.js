@@ -18,66 +18,67 @@ angular.module('pisaVisualisationApp')
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function(d3) {
 
+          var margin = { top: 50, right: 0, bottom: 100, left: 190 },
+          // TODO: do not hardcode height and width values
+            width = 960 - margin.left - margin.right,
+            height = 450 - margin.top - margin.bottom,
+            gridSize = Math.floor(width / 24),
+            gridHeight = 1.4 * gridSize,
+            gridWidth = 3.5 * gridSize,
+            legendElementWidth = gridWidth,
+            colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
+            expectations = ["ISCED L2", "ISCED L3B,C", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+            qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+            income = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
+
+          var svg = d3.select(".chartBack").append("svg")
+            .attr("id", "heatMapCanvas")
+            .attr("width", 100 + "%")
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          // X Axis Title
+          svg.append("text")
+            .attr("x", (width / 2) - 120)
+            .attr("y", -(margin.top / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Parent's Income (Dollars)");
+
+          // Y Axis Title
+          svg.append("text")
+            .attr("x", 20)
+            .attr("y", height/2)
+            .attr("text-anchor", "end")
+            .style("font-size", "16px")
+            .attr("transform", "rotate(270, " + (-margin.left + 90) + "," + (height/2) +  ")")
+            .text("Parent's Expectations (Education Lvl)");
+
+          // X Axis Labels
+          var timeLabels = svg.selectAll(".timeLabel")
+            .data(income)
+            .enter().append("text")
+            .text(function(d) { return d; })
+            .attr("x", function(d, i) { return i * (gridWidth); })
+            .attr("y", 0)
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + gridSize + ", -6)");
+
+          // Y Axis Labels
+          var dayLabels = svg.selectAll(".dayLabel")
+            .data(expectations)
+            .enter().append("text")
+            .text(function (d) { return d; })
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * gridHeight; })
+            .style("text-anchor", "end")
+            .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
+
           scope.$watch('data', function(fileName) {
             if (!fileName) {
               return;
             }
-            var margin = { top: 50, right: 0, bottom: 100, left: 190 },
-            // TODO: do not hardcode height and width values
-              width = 960 - margin.left - margin.right,
-              height = 450 - margin.top - margin.bottom,
-              gridSize = Math.floor(width / 24),
-              gridHeight = 1.4 * gridSize,
-              gridWidth = 3.5 * gridSize,
-              legendElementWidth = gridWidth,
-              colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
-              expectations = ["ISCED L2", "ISCED L3B,C", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
-              qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
-              income = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
-
-            var svg = d3.select(".chartBackdrop").append("svg")
-              .attr("id", "heatMapCanvas")
-              .attr("width", 100 + "%")
-              .attr("height", height + margin.top + margin.bottom)
-              .append("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            // X Axis Title
-            svg.append("text")
-              .attr("x", (width / 2) - 120)
-              .attr("y", -(margin.top / 2))
-              .attr("text-anchor", "middle")
-              .style("font-size", "16px")
-              .text("Parent's Income (Dollars)");
-
-            // Y Axis Title
-            svg.append("text")
-              .attr("x", 20)
-              .attr("y", height/2)
-              .attr("text-anchor", "end")
-              .style("font-size", "16px")
-              .attr("transform", "rotate(270, " + (-margin.left + 90) + "," + (height/2) +  ")")
-              .text("Parent's Expectations (Education Lvl)");
-
-            // X Axis Labels
-            var timeLabels = svg.selectAll(".timeLabel")
-              .data(income)
-              .enter().append("text")
-              .text(function(d) { return d; })
-              .attr("x", function(d, i) { return i * (gridWidth); })
-              .attr("y", 0)
-              .style("text-anchor", "middle")
-              .attr("transform", "translate(" + gridSize + ", -6)");
-
-            // Y Axis Labels
-            var dayLabels = svg.selectAll(".dayLabel")
-              .data(expectations)
-              .enter().append("text")
-              .text(function (d) { return d; })
-              .attr("x", 0)
-              .attr("y", function (d, i) { return i * gridHeight; })
-              .style("text-anchor", "end")
-              .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
             // Heat Map
             var heatmapChart = function(fileName) {
@@ -88,7 +89,6 @@ angular.module('pisaVisualisationApp')
                   frequency: parseInt(d.frequency)
                 };
               }, function(error, data) {
-
                 // Min and Max
                 var minFreq = d3.min(data, function (d) {
                   return d.frequency;

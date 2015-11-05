@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: Vis4Ctrl', function () {
+describe('Controller: ParentCtrl', function () {
 
   // load the controller's module
   beforeEach(module('pisaVisualisationApp'));

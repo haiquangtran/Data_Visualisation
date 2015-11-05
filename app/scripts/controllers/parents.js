@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name pisaVisualisationApp.controller:Vis4Ctrl
+ * @name pisaVisualisationApp.controller:ParentsCtrl
  * @description
- * # Vis4Ctrl
+ * # ParentsCtrl
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('Vis4Ctrl', function ($scope, fileService) {
+  .controller('ParentsCtrl', function ($scope, fileService) {
     $scope.parentQualificationsFile = fileService.getFileNameTotalParentsQualifications;
     // Default values
     $scope.selectedSalary = "Less than <$A>";

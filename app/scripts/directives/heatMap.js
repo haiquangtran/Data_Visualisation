@@ -7,231 +7,181 @@
  * # heatMap
  */
 angular.module('pisaVisualisationApp')
-  .directive('heatMap', function (d3Service) {
+  .directive('heatMap', function (d3Service, preprocessorHelper) {
     return {
       restrict: 'E',
       replace: false,
-      scope: {data: '=chartData'},
+      scope: {
+        data: '=chartData',
+        onClickEvent: '&ngClick'
+      },
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function(d3) {
 
-          //UI configuration
-          var itemSize = 18,
-            cellSize = itemSize - 1,
-            width = 800,
-            height = 500,
-            margin = {top: 20, right: 20, bottom: 20, left: 25};
+          var margin = { top: 50, right: 0, bottom: 100, left: 190 },
+          // TODO: do not hardcode height and width values
+            width = 960 - margin.left - margin.right,
+            height = 450 - margin.top - margin.bottom,
+            gridSize = Math.floor(width / 24),
+            gridHeight = 1.4 * gridSize,
+            gridWidth = 3.5 * gridSize,
+            legendElementWidth = gridWidth,
+            colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
+            expectations = ["ISCED L2", "ISCED L3B,C", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+            qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+            income = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
 
-          //formats
-          var hourFormat = d3.time.format('%H'),
-            dayFormat = d3.time.format('%j'),
-            timeFormat = d3.time.format('%Y-%m-%dT%X'),
-            monthDayFormat = d3.time.format('%m.%d');
+          var svg = d3.select(".chartBackdrop").append("svg")
+            .attr("id", "heatMapCanvas")
+            .attr("width", 100 + "%")
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-          //data vars for rendering
-          var dateExtent = null,
-            data = null,
-            dayOffset = 0,
-            colorCalibration = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
+          // X Axis Title
+          svg.append("text")
+            .attr("x", (width / 2) - 120)
+            .attr("y", -(margin.top / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Parent's Income (Dollars)");
 
-          //axises and scales
-          var axisWidth = 0,
-            axisHeight = itemSize * 24,
-            xAxisScale = d3.time.scale(),
-            xAxis = d3.svg.axis()
-              .orient('top')
-              .ticks(d3.time.days, 3)
-              .tickFormat(monthDayFormat),
-            yAxisScale = d3.scale.linear()
-              .range([0, axisHeight])
-              .domain([0, 24]),
-            yAxis = d3.svg.axis()
-              .orient('left')
-              .ticks(5)
-              .tickFormat(d3.format('02d'))
-              .scale(yAxisScale);
+          // Y Axis Title
+          svg.append("text")
+            .attr("x", 20)
+            .attr("y", height/2)
+            .attr("text-anchor", "end")
+            .style("font-size", "16px")
+            .attr("transform", "rotate(270, " + (-margin.left + 90) + "," + (height/2) +  ")")
+            .text("Parent's Expectations (Education Lvl)");
 
-          initCalibration();
+          // X Axis Labels
+          var timeLabels = svg.selectAll(".timeLabel")
+            .data(income)
+            .enter().append("text")
+            .text(function(d) { return d; })
+            .attr("x", function(d, i) { return i * (gridWidth); })
+            .attr("y", 0)
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + gridSize + ", -6)");
 
-          var svg = d3.select(element[0]).append("svg");
-
-          var heatmap = svg
-            .attr('width', width)
-            .attr('height', height)
-            .append('g')
-            .attr('width', width - margin.left - margin.right)
-            .attr('height', height - margin.top - margin.bottom)
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-          var rect = null;
+          // Y Axis Labels
+          var dayLabels = svg.selectAll(".dayLabel")
+            .data(expectations)
+            .enter().append("text")
+            .text(function (d) { return d; })
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * gridHeight; })
+            .style("text-anchor", "end")
+            .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
           scope.$watch('data', function(fileName) {
-            if(!fileName){ return; }
+            if (!fileName) {
+              return;
+            }
 
-            d3.csv(fileName, function (data) {
+            // Heat Map
+            var heatmapChart = function(fileName) {
+              d3.csv(fileName, function(d) {
+                return {
+                  expectation: preprocessorHelper.getIndexFromParentExpectations(d.expectation),
+                  salary: preprocessorHelper.getIndexFromParentExpectations(d.salary),
+                  frequency: parseInt(d.frequency)
+                };
+              }, function(error, data) {
+                // Min and Max
+                var minFreq = d3.min(data, function (d) {
+                  return d.frequency;
+                }), maxFreq = d3.max(data, function (d) {
+                  return d.frequency;
+                });
 
-              var income = [290211, 111092, 78853, 53184, 39265, 9979];
-              var expectations = [32248, 19943, 47945, 10776, 24516, 63403];
+                var colorScale = d3.scale.quantile()
+                  .domain([minFreq, maxFreq])
+                  .range(colours);
 
-              // TODO: Test data
-              var data = [
-                {
-                  "expectation":"2014-09-25T01:00:01",
-                  "income":{
-                    "frequency":30.22
-                  }
-                },
-                {
-                  "expectation":"2014-09-25T01:00:01",
-                  "income":{
-                    "frequency":41.61
-                  }
-                }
-              ];
-              //var data = [
-              //  {
-              //    "expectation": "level1",
-              //    "salary": {
-              //      "Less than <$A>": 0,
-              //      "<$A> or more but less than <$B>": 0,
-              //      "<$B> or more but less than <$C>": 0,
-              //      "<$C> or more but less than <$D>": 0,
-              //      "<$D> or more but less than <$E>": 0,
-              //      "<$E> or more": 0
-              //    }
-              //  },
-              //  {
-              //    "expectation": "level2",
-              //    "salary": {
-              //      "Less than <$A>": 0,
-              //      "<$A> or more but less than <$B>": 0,
-              //      "<$B> or more but less than <$C>": 0,
-              //      "<$C> or more but less than <$D>": 0,
-              //      "<$D> or more but less than <$E>": 0,
-              //      "<$E> or more": 0
-              //    }
-              //  }
-              //];
+                var heatRects = svg.selectAll(".hour")
+                  .data(data, function(d) {return d.expectation +':'+d.salary;});
 
-              data.forEach(function (valueObj) {
-                valueObj['date'] = timeFormat.parse(valueObj['expectation']);
-              }, true);
+                heatRects.append("title");
 
-              dateExtent = d3.extent(data, function (d) {
-                return d.date;
-              });
+                // Heat map rects
+                heatRects.enter().append("rect")
+                  .attr("x", function(d) { return (d.salary) * gridWidth; })
+                  .attr("y", function(d) { return (d.expectation) * gridHeight; })
+                  .attr("rx", 4)
+                  .attr("ry", 4)
+                  .attr("class", "bordered")
+                  .attr("width", gridWidth)
+                  .attr("height", gridHeight)
+                  .attr("background-color", colours[0]);
 
-              axisWidth = itemSize * ((dateExtent[1]) - (dateExtent[0]) + 1);
+                heatRects.transition().duration(1000)
+                  .transition().ease("elastic")
+                  .attr("fill", function(d) { return colorScale(d.frequency); });
+                heatRects.select("title").text(function(d) { return d.frequency; });
+                heatRects.exit().remove();
 
-              //xAxis = d3.svg.axis()
-              //  .orient('top')
-              //  .ticks(d3.time.days, 3)
-              //  .tickFormat(monthDayFormat);
+                // Tool Tip
+                var tooltip = d3.select("body")
+                  .append("div")
+                  .style("position", "absolute")
+                  .style("z-index", "1")
+                  .style("visibility", "hidden")
+                  .style("width", "200px")
+                  .style("height", "100px")
+                  .style("background", "rgba(255,255, 255,0.8)")
+                  .style("text-align", "center");
 
-              //TODO: AXIS
-              //render axises
-              xAxis.scale(xAxisScale.range([0, axisWidth]).domain([dateExtent[0], dateExtent[1]]));
-              svg.append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-                .attr('class', 'x axis')
-                .call(xAxis)
-                .append('text')
-                .text('date')
-                .attr('transform', 'translate(' + axisWidth + ',-10)');
-
-              svg.append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-                .attr('class', 'y axis')
-                .call(yAxis)
-                .append('text')
-                .text('time')
-                .attr('transform', 'translate(-10,' + axisHeight + ') rotate(-90)');
-
-              //tool  tip
-              var tooltip = d3.select("body")
-                .append("div")
-                .style("position", "absolute")
-                .style("z-index", "10")
-                .style("visibility", "hidden")
-                .style("width", "200px")
-                .style("height", "100px")
-                .style("background", "rgba(255,255, 255,0.8)")
-                .style("text-align", "center");
-
-              //render heatmap rects
-              dayOffset = dayFormat(dateExtent[0]);
-              rect = heatmap.selectAll('rect')
-                .data(data)
-                .enter().append('rect')
-                .attr('width', cellSize)
-                .attr('height', cellSize)
-                .attr('x', function (d) {
-                  return itemSize * (dayFormat(d.date) - dayOffset);
-                })
-                .attr('y', function (d, i) {
-                  return i * itemSize;
-                })
-                .attr('fill', '#ffffff')
-                .on("mouseover", function(d, i) {
+                // Hover
+                heatRects.on("mouseover", function(d, i) {
                   d3.select(this).classed('selected', true);
-                  tooltip.text("This is a test");
+                  // Hover Text
+                  var popUpText = "Frequency:" + d.frequency;
+                  tooltip.text(popUpText);
                   tooltip.style("visibility", "visible");
-                })
-                .on("mousemove", function() {
+                }).on("mousemove", function() {
                   return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-                })
-                .on("mouseout", function(d, i) {
+                }).on("mouseout", function(d, i) {
                   d3.select(this).classed('selected', false);
                   tooltip.style("visibility", "hidden");
                 });
 
-              renderColor();
-            });
+                // Selection
+                heatRects.on("click", function(d) {
+                  scope.onClickEvent({
+                    expectation: preprocessorHelper.getParentExpectationsFromIndex(d.expectation),
+                    salary: preprocessorHelper.getParentSalaryFromIndex(d.salary)
+                  });
+                });
+
+                // Draw legend
+                var legend = svg.selectAll(".legend")
+                  .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+
+                legend.enter().append("g")
+                  .attr("class", "legend");
+
+                legend.append("rect")
+                  .attr("x", function(d, i) { return legendElementWidth * i; })
+                  .attr("y", height)
+                  .attr("width", legendElementWidth)
+                  .attr("height", gridSize / 2)
+                  .attr("fill", function(d, i) { return colours[i]; });
+
+                legend.append("text")
+                  .attr("class", "mono")
+                  .text(function(d) { return "≥ " + Math.round(d); })
+                  .attr("x", function(d, i) { return legendElementWidth * i; })
+                  .attr("y", height + gridSize);
+
+                legend.exit().remove();
+              });
+            };
+
+            heatmapChart(fileName);
 
           });
-
-          /**
-           * Triggers count or daily radio buttons when clicked
-           */
-          function initCalibration() {
-            d3.select('[role="calibration"] [role="example"]').select('svg')
-              .selectAll('rect').data(colorCalibration).enter()
-              .append('rect')
-              .attr('width', cellSize)
-              .attr('height', cellSize)
-              .attr('x', function (d, i) {
-                return i * itemSize;
-              })
-              .attr('fill', function (d) {
-                return d;
-              });
-
-            //bind click event
-            d3.selectAll('[role="calibration"] [name="displayType"]').on('click', function () {
-              renderColor();
-            });
-          }
-
-          function renderColor() {
-            var renderByCount = document.getElementsByName('displayType')[0].checked;
-
-            rect
-              .transition()
-              .delay(function (d) {
-                return 1;
-              })
-              .duration(500)
-              .attrTween('fill', function (d, i, a) {
-                //choose color dynamically
-                var colorIndex = d3.scale.quantize()
-                  .range([0, 1, 2, 3, 4, 5])
-                  .domain((renderByCount ? [0, 500] : [500,100]));
-
-                return d3.interpolate(a, colorCalibration[colorIndex(d.income['frequency'])]);
-              });
-          }
-
-          //extend frame height in `http://bl.ocks.org/`
-          d3.select(self.frameElement).style("height", "600px");
         });
       }
     };
