@@ -7,7 +7,7 @@
  * # verticalBarChart
  */
 angular.module('pisaVisualisationApp')
-  .directive('verticalBarChart', function (d3Service, preprocessorHelper) {
+  .directive('verticalBarChart', function (d3Service, toolTipService) {
     return {
       restrict: 'E',
       replace: false,
@@ -38,34 +38,6 @@ angular.module('pisaVisualisationApp')
             .scale(y)
             .orient("left")
             .ticks(10);
-
-          function addToolTip(bars) {
-            // Tool Tip
-            var tooltip = d3.select("body")
-              .append("div")
-              .style("position", "absolute")
-              .style("z-index", "1")
-              .style("visibility", "hidden")
-              .style("width", "200px")
-              .style("height", "100px")
-              .style("background", "rgba(255,255, 255,0.8)")
-              .style("text-align", "center");
-            // Hover
-            bars.on("mouseover", function(d, i) {
-              d3.select(this).classed('selected', true);
-              // Hover Text
-              var popUpText = " Parent's Income: " + d.salary + " Parent's Expectations: " + d.expectation + "\n"
-                + "Mother freq: " + parseInt(d.motherFrequency) + "  Father freq: " +  parseInt(d.fatherFrequency)
-                + "\nBoth freq: " + parseInt(d.motherFrequency + d.fatherFrequency);
-              tooltip.text(popUpText);
-              tooltip.style("visibility", "visible");
-            }).on("mousemove", function() {
-              return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-            }).on("mouseout", function(d, i) {
-              d3.select(this).classed('selected', false);
-              tooltip.style("visibility", "hidden");
-            });
-          }
 
           var barChart = function(fileName, selectedExpectation, selectedSalary) {
             d3.csv(fileName, function(d) {
@@ -156,7 +128,13 @@ angular.module('pisaVisualisationApp')
                     return "red";
                     //return colours[i % colours.length];
                   });
-                addToolTip(bars);
+
+                toolTipService.addToolTip(bars, function(d) {
+                  var hoverText = " Parent's Income: " + d.salary + " Parent's Expectations: " + d.expectation + "\n"
+                    + "Mother freq: " + parseInt(d.motherFrequency) + "  Father freq: " +  parseInt(d.fatherFrequency)
+                    + "\nBoth freq: " + parseInt(d.motherFrequency + d.fatherFrequency);
+                  return hoverText;
+                });
               }
 
               // Create bars in the bar chart representing the fathers highest qualification

@@ -29,7 +29,7 @@ angular.module('pisaVisualisationApp')
             colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
             expectations = ["ISCED L2", "ISCED L3B,C", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
             qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
-            income = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
+            salary = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
 
           var svg = d3.select(".chartBackdrop").append("svg")
             .attr("id", "heatMapCanvas")
@@ -57,7 +57,7 @@ angular.module('pisaVisualisationApp')
 
           // X Axis Labels
           var timeLabels = svg.selectAll(".timeLabel")
-            .data(income)
+            .data(salary)
             .enter().append("text")
             .text(function(d) { return d; })
             .attr("x", function(d, i) { return i * (gridWidth); })
