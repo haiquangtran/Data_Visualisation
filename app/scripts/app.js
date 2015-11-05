@@ -31,7 +31,7 @@ angular
         controllerAs: 'vis1'
       })
       .when('/children', {
-        templateUrl: '../views/children.html',
+        templateUrl: 'views/children.html',
         controller: 'ChildrenCtrl',
         controllerAs: 'childrenCtrl'
       })
@@ -41,7 +41,7 @@ angular
         controllerAs: 'vis3'
       })
       .when('/parents', {
-        templateUrl: '../views/parents.html',
+        templateUrl: 'views/parents.html',
         controller: 'ParentsCtrl',
         controllerAs: 'parentsCtrl'
       })
