@@ -29,36 +29,36 @@ expectation,salary,motherQualification,motherFrequency,fatherQualification,fathe
 "ISCED lv2","<$E> or more","ISCED lv4",6,"ISCED lv4",12
 "ISCED lv2","<$E> or more","ISCED lv5B",20,"ISCED lv5B",15
 "ISCED lv2","<$E> or more","ISCED lv5A,6",5,"ISCED lv5A,6",8
-"ISCED lv3B",C,"Less than <$A>","None",880,"None",869
-"ISCED lv3B",C,"Less than <$A>","ISCED lv3A",10,"ISCED lv3A",20
-"ISCED lv3B",C,"Less than <$A>","ISCED lv4",25,"ISCED lv4",27
-"ISCED lv3B",C,"Less than <$A>","ISCED lv5B",36,"ISCED lv5B",36
-"ISCED lv3B",C,"Less than <$A>","ISCED lv5A,6",308,"ISCED lv5A,6",256
-"ISCED lv3B",C,"<$A> or more but less than <$B>","None",354,"None",360
-"ISCED lv3B",C,"<$A> or more but less than <$B>","ISCED lv3A",5,"ISCED lv3A",6
-"ISCED lv3B",C,"<$A> or more but less than <$B>","ISCED lv4",15,"ISCED lv4",15
-"ISCED lv3B",C,"<$A> or more but less than <$B>","ISCED lv5B",31,"ISCED lv5B",39
-"ISCED lv3B",C,"<$A> or more but less than <$B>","ISCED lv5A,6",253,"ISCED lv5A,6",224
-"ISCED lv3B",C,"<$B> or more but less than <$C>","None",118,"None",121
-"ISCED lv3B",C,"<$B> or more but less than <$C>","ISCED lv3A",6,"ISCED lv3A",2
-"ISCED lv3B",C,"<$B> or more but less than <$C>","ISCED lv4",9,"ISCED lv4",10
-"ISCED lv3B",C,"<$B> or more but less than <$C>","ISCED lv5B",26,"ISCED lv5B",29
-"ISCED lv3B",C,"<$B> or more but less than <$C>","ISCED lv5A,6",100,"ISCED lv5A,6",105
-"ISCED lv3B",C,"<$C> or more but less than <$D>","None",58,"None",64
-"ISCED lv3B",C,"<$C> or more but less than <$D>","ISCED lv3A",5,"ISCED lv3A",1
-"ISCED lv3B",C,"<$C> or more but less than <$D>","ISCED lv4",6,"ISCED lv4",2
-"ISCED lv3B",C,"<$C> or more but less than <$D>","ISCED lv5B",16,"ISCED lv5B",19
-"ISCED lv3B",C,"<$C> or more but less than <$D>","ISCED lv5A,6",47,"ISCED lv5A,6",45
-"ISCED lv3B",C,"<$D> or more but less than <$E>","None",26,"None",26
-"ISCED lv3B",C,"<$D> or more but less than <$E>","ISCED lv3A",2,"ISCED lv3A",4
-"ISCED lv3B",C,"<$D> or more but less than <$E>","ISCED lv4",4,"ISCED lv4",5
-"ISCED lv3B",C,"<$D> or more but less than <$E>","ISCED lv5B",11,"ISCED lv5B",10
-"ISCED lv3B",C,"<$D> or more but less than <$E>","ISCED lv5A,6",26,"ISCED lv5A,6",28
-"ISCED lv3B",C,"<$E> or more","None",25,"None",21
-"ISCED lv3B",C,"<$E> or more","ISCED lv3A",7,"ISCED lv3A",12
-"ISCED lv3B",C,"<$E> or more","ISCED lv4",5,"ISCED lv4",13
-"ISCED lv3B",C,"<$E> or more","ISCED lv5B",17,"ISCED lv5B",16
-"ISCED lv3B",C,"<$E> or more","ISCED lv5A,6",33,"ISCED lv5A,6",27
+"ISCED lv3B,C","Less than <$A>","None",880,"None",869
+"ISCED lv3B,C","Less than <$A>","ISCED lv3A",10,"ISCED lv3A",20
+"ISCED lv3B,C","Less than <$A>","ISCED lv4",25,"ISCED lv4",27
+"ISCED lv3B,C","Less than <$A>","ISCED lv5B",36,"ISCED lv5B",36
+"ISCED lv3B,C","Less than <$A>","ISCED lv5A,6",308,"ISCED lv5A,6",256
+"ISCED lv3B,C","<$A> or more but less than <$B>","None",354,"None",360
+"ISCED lv3B,C","<$A> or more but less than <$B>","ISCED lv3A",5,"ISCED lv3A",6
+"ISCED lv3B,C","<$A> or more but less than <$B>","ISCED lv4",15,"ISCED lv4",15
+"ISCED lv3B,C","<$A> or more but less than <$B>","ISCED lv5B",31,"ISCED lv5B",39
+"ISCED lv3B,C","<$A> or more but less than <$B>","ISCED lv5A,6",253,"ISCED lv5A,6",224
+"ISCED lv3B,C","<$B> or more but less than <$C>","None",118,"None",121
+"ISCED lv3B,C","<$B> or more but less than <$C>","ISCED lv3A",6,"ISCED lv3A",2
+"ISCED lv3B,C","<$B> or more but less than <$C>","ISCED lv4",9,"ISCED lv4",10
+"ISCED lv3B,C","<$B> or more but less than <$C>","ISCED lv5B",26,"ISCED lv5B",29
+"ISCED lv3B,C","<$B> or more but less than <$C>","ISCED lv5A,6",100,"ISCED lv5A,6",105
+"ISCED lv3B,C","<$C> or more but less than <$D>","None",58,"None",64
+"ISCED lv3B,C","<$C> or more but less than <$D>","ISCED lv3A",5,"ISCED lv3A",1
+"ISCED lv3B,C","<$C> or more but less than <$D>","ISCED lv4",6,"ISCED lv4",2
+"ISCED lv3B,C","<$C> or more but less than <$D>","ISCED lv5B",16,"ISCED lv5B",19
+"ISCED lv3B,C","<$C> or more but less than <$D>","ISCED lv5A,6",47,"ISCED lv5A,6",45
+"ISCED lv3B,C","<$D> or more but less than <$E>","None",26,"None",26
+"ISCED lv3B,C","<$D> or more but less than <$E>","ISCED lv3A",2,"ISCED lv3A",4
+"ISCED lv3B,C","<$D> or more but less than <$E>","ISCED lv4",4,"ISCED lv4",5
+"ISCED lv3B,C","<$D> or more but less than <$E>","ISCED lv5B",11,"ISCED lv5B",10
+"ISCED lv3B,C","<$D> or more but less than <$E>","ISCED lv5A,6",26,"ISCED lv5A,6",28
+"ISCED lv3B,C","<$E> or more","None",25,"None",21
+"ISCED lv3B,C","<$E> or more","ISCED lv3A",7,"ISCED lv3A",12
+"ISCED lv3B,C","<$E> or more","ISCED lv4",5,"ISCED lv4",13
+"ISCED lv3B,C","<$E> or more","ISCED lv5B",17,"ISCED lv5B",16
+"ISCED lv3B,C","<$E> or more","ISCED lv5A,6",33,"ISCED lv5A,6",27
 "ISCED lv3A","Less than <$A>","None",2674,"None",2482
 "ISCED lv3A","Less than <$A>","ISCED lv3A",31,"ISCED lv3A",44
 "ISCED lv3A","Less than <$A>","ISCED lv4",48,"ISCED lv4",70

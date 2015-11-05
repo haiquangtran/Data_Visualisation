@@ -19,29 +19,38 @@ angular.module('pisaVisualisationApp')
      * @returns {number}
      */
     function getIndexFromParentExpectations(stringData) {
-      if (stringData === "ISCED lv2" || stringData === "Less than <$A>") {
-        return parseInt(0);
-      } else if (stringData === "ISCED lv3B,C" || stringData === "<$A> or more but less than <$B>") {
-        return parseInt(1);
-      } else if (stringData === "ISCED lv3A" || stringData === "<$B> or more but less than <$C>") {
-        return parseInt(2);
-      } else if (stringData === "ISCED lv4" || stringData === "<$C> or more but less than <$D>") {
-        return parseInt(3);
-      } else if (stringData === "ISCED lv5B" || stringData === "<$D> or more but less than <$E>") {
-        return parseInt(4);
-      } else if (stringData === "ISCED lv5A,6" || stringData === "<$E> or more") {
-        return parseInt(5);
+      var expectations = ["ISCED lv2", "ISCED lv3B,C", "ISCED lv3A", "ISCED lv4", "ISCED lv5B", "ISCED lv5A,6"];
+      var answers = ["Less than <$A>", "<$A> or more but less than <$B>", "<$B> or more but less than <$C>",
+        "<$C> or more but less than <$D>", "<$D> or more but less than <$E>", "<$E> or more"];
+
+      for (var i = 0; i < expectations.length; i++) {
+        if (stringData === expectations[i] || stringData === answers[i]) {
+          return i;
+        }
       }
     }
 
     /**
      * Heat map helper
      *
-     * @param stringDatas
-     * @returns {number}
+     * @param index
+     * @returns {string}
      */
-    function getParentExpectationsFromIndex(stringData) {
-      //TODO: for heat map scrolling
+    function getParentExpectationsFromIndex(index) {
+      var expectations = ["ISCED lv2", "ISCED lv3B,C", "ISCED lv3A", "ISCED lv4", "ISCED lv5B", "ISCED lv5A,6"];
+      if (index >= 0) return expectations[index];
+    }
+
+    /**
+     * Heat map helper
+     *
+     * @param stringDatas
+     * @returns {string}
+     */
+    function getParentSalaryFromIndex(index) {
+      var salary = ["Less than <$A>", "<$A> or more but less than <$B>", "<$B> or more but less than <$C>",
+        "<$C> or more but less than <$D>", "<$D> or more but less than <$E>", "<$E> or more"];
+      if (index >= 0) return salary[index];
     }
 
     // Public API here
@@ -49,8 +58,11 @@ angular.module('pisaVisualisationApp')
       getIndexFromParentExpectations: function(stringData) {
         return getIndexFromParentExpectations(stringData);
       },
-      getParentExpectationsFromIndex: function(stringData) {
-        return getParentExpectationsFromIndex(stringData);
+      getParentExpectationsFromIndex: function(index) {
+        return getParentExpectationsFromIndex(index);
+      },
+      getParentSalaryFromIndex: function(index) {
+        return getParentSalaryFromIndex(index);
       }
     };
   });

@@ -9,12 +9,19 @@
  */
 angular.module('pisaVisualisationApp')
   .controller('Vis4Ctrl', function ($scope, fileService) {
-    $scope.barData = fileService.getFileNameTotalParentsExpectations;
-    $scope.parentExpectationsFile = fileService.getFileNameTotalParentsExpectations;
     $scope.parentQualificationsFile = fileService.getFileNameTotalParentsQualifications;
+    // Default values
+    $scope.selectedSalary = "Less than <$A>";
+    $scope.selectedExpectation = "ISCED lv2";
+    $scope.parentExpectationsFile = fileService.getFileNameTotalParentsExpectations;
 
-    // Set dataset when button clicked
-    $scope.setDataset = function() {
-      $scope.heatData = fileService.getFileNameTotalParentsExpectations;
+
+    // Set selected values from heat map when button clicked
+    $scope.setSelected = function(salary, expectation) {
+      $scope.selectedSalary = salary;
+      $scope.selectedExpectation = expectation;
+      $scope.$apply();
+      console.log($scope.selectedSalary);
+      console.log($scope.selectedExpectation);
     }
   });

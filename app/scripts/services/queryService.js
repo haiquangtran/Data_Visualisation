@@ -71,7 +71,7 @@ angular.module('pisaVisualisationApp')
     function convertIndexToQualificationString(index) {
       // Should not have 'None' value
       var parentQualifications = ["ISCED lv3A", "ISCED lv4","ISCED lv5B", "ISCED lv5A,6"];
-      return parentQualifications[index];
+      if (index >= 0) return parentQualifications[index];
     }
 
     /**

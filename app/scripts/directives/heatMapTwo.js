@@ -11,7 +11,10 @@ angular.module('pisaVisualisationApp')
     return {
       restrict: 'E',
       replace: false,
-      scope: {data: '=chartData'},
+      scope: {
+        data: '=chartData',
+        onClickEvent: '&ngClick'
+      },
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function(d3) {
 
@@ -28,11 +31,12 @@ angular.module('pisaVisualisationApp')
               gridWidth = 3.5 * gridSize,
               legendElementWidth = gridWidth,
               colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'],
-              expectations = ["ISCED L2", "ISCED L3B", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
+              expectations = ["ISCED L2", "ISCED L3B,C", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
               qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
               income = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
 
             var svg = d3.select(".chartBackdrop").append("svg")
+              .attr("id", "heatMapCanvas")
               .attr("width", 100 + "%")
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
@@ -132,7 +136,6 @@ angular.module('pisaVisualisationApp')
                 // Hover
                 heatRects.on("mouseover", function(d, i) {
                   d3.select(this).classed('selected', true);
-
                   // Hover Text
                   var popUpText = "Frequency:" + d.frequency;
                   tooltip.text(popUpText);
@@ -142,6 +145,14 @@ angular.module('pisaVisualisationApp')
                 }).on("mouseout", function(d, i) {
                   d3.select(this).classed('selected', false);
                   tooltip.style("visibility", "hidden");
+                });
+
+                // Selection
+                heatRects.on("click", function(d) {
+                  scope.onClickEvent({
+                    expectation: preprocessorHelper.getParentExpectationsFromIndex(d.expectation),
+                    salary: preprocessorHelper.getParentSalaryFromIndex(d.salary)
+                  });
                 });
 
                 // Draw legend

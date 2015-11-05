@@ -43,6 +43,7 @@ angular.module('pisaVisualisationApp')
 
                 var vis = d3.select(".chartBackdrop")
                   .append("svg:svg")
+                  .attr("id", "pieCanvas")
                   .data([pieData])
                   .attr("width", w)
                   .attr("height", h)
@@ -60,7 +61,6 @@ angular.module('pisaVisualisationApp')
                   })
                   .attr("d", function (d) {
                     // log the result of the arc generator to show how cool it is :)
-                    console.log(arc(d));
                     return arc(d);
                   });
                 // add the text

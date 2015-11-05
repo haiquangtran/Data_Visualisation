@@ -11,9 +11,9 @@
 
 <div ng-app="pisaVisualisationApp" ng-controller="Vis4Ctrl">
   <div class="chartBackdrop">
-    <heat-map-two chart-data="parentExpectationsFile"></heat-map-two>
-    <vertical-bar-chart chart-data="parentQualificationsFile"></vertical-bar-chart>
+    <heat-map-two chart-data="parentExpectationsFile" data-ng-click="setSelected(salary, expectation)"></heat-map-two>
+    <vertical-bar-chart chart-data="parentQualificationsFile" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></vertical-bar-chart>
     <pie-chart chart-data="parentExpectationsFile"></pie-chart>
   </div>
-  <!--<button ng-click="setDataset()"> Dataset </button>-->
+  <button ng-click="setSelected()"> Dataset </button>
 </div>

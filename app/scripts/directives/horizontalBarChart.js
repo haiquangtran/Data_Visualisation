@@ -137,10 +137,10 @@ angular.module('pisaVisualisationApp')
               //
 
               //var results = queryService.getQualifications(data);
-              //console.log("father qualifications " + fatherQualifications);
-              //console.log("mother qualifications " + motherQualifications);
-              //console.log("salary " + salary);
-              //console.log("expectations " + expectations);
+              console.log("father qualifications " + fatherQualifications);
+              console.log("mother qualifications " + motherQualifications);
+              console.log("salary " + salary);
+              console.log("expectations " + expectations);
               //console.log("heatmap " + heatMap);
               //console.log("RESULTS: " + results);
               //console.log("RESULTS SIZE " + results.length);
