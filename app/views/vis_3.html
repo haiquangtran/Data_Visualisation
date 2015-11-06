@@ -3,4 +3,8 @@
 </div>
 <div ng-app="pisaVisualisationApp" ng-controller="Vis3Ctrl">
   <bars-chart chart-data="myData"></bars-chart>
+  <div class="chartBackdrop">
+    <area-chart chart-data="test" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></area-chart>
+    <vertical-bar-chart chart-data="parentQualificationsFile" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></vertical-bar-chart>
+  </div>
 </div>
