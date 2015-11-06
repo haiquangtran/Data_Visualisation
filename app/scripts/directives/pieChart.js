@@ -26,6 +26,28 @@ angular.module('pisaVisualisationApp')
           var r = h/3;
           var colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
 
+          function convertToPieData(fatherExpectationPercentage, motherExpectationPercentage) {
+            var pieData = [
+              {
+                "label":"Father",
+                "value": fatherExpectationPercentage,
+                "percentages": {
+                  "mother": motherExpectationPercentage,
+                  "father": fatherExpectationPercentage
+                }
+              },
+              {
+                "label":"Mother",
+                "value": motherExpectationPercentage,
+                "percentages": {
+                  "mother": motherExpectationPercentage,
+                  "father": fatherExpectationPercentage
+                }
+              }
+            ];
+            return pieData;
+          }
+
           var pieChart = function(fileName, selectedExpectation, selectedSalary) {
             d3.csv(fileName, function(d) {
               // Filter
@@ -44,11 +66,8 @@ angular.module('pisaVisualisationApp')
                 }),
                 fatherExpectationPercentage = data[0].fatherFrequency/total,
                 motherExpectationPercentage = data[0].motherFrequency/total;
-              // Data
-              var pieData = [
-                {"label":"Father", "value": fatherExpectationPercentage},
-                {"label":"Mother", "value": motherExpectationPercentage}
-              ];
+
+              var pieData = convertToPieData(fatherExpectationPercentage, motherExpectationPercentage);
 
               function createPieChart() {
                 var vis = d3.select(".chartBackdrop")
@@ -66,9 +85,9 @@ angular.module('pisaVisualisationApp')
                 // select paths, use arc generator to draw
                 var arcs = vis.selectAll("g.slice").data(pie).enter().append("svg:g").attr("class", "slice");
                 arcs.append("svg:path")
-                  //.attr("fill", function(d, i){
-                  //  return colours[i];
-                  //})
+                  .attr("fill", function(d, i){
+                    return colours[i];
+                  })
                   .attr("d", function (d) {
                     return arc(d);
                   });
@@ -82,9 +101,16 @@ angular.module('pisaVisualisationApp')
                 );
 
                 // Add tool tip
-                toolTipService.addToolTip(arcs, function() {
-                  return "Total Frequency:" + total + "  Mother:" + motherExpectationPercentage.toFixed(2) + "%" + "  Father:"
-                    + fatherExpectationPercentage.toFixed(2) + "%";
+                toolTipService.addToolTip(arcs, function(d, i) {
+                  var full = 1;
+                  if (i === 0) {
+                    // Mother
+                    return "Total Frequency:" + total + "  Mother:" + d.value.toFixed(2) + "%" + "  Father:"
+                      + (full-d.value).toFixed(2) + "%";
+                  }
+                  // Father
+                  return "Total Frequency:" + total + "  Mother:" + (full-d.value).toFixed(2) + "%" + "  Father:"
+                    + d.value.toFixed(2) + "%";
                 });
               }
 
@@ -120,43 +146,42 @@ angular.module('pisaVisualisationApp')
                 fatherExpectationPercentage = data[0].fatherFrequency/total,
                 motherExpectationPercentage = data[0].motherFrequency/total;
               // Data
-              var pieData = [
-                {"label":"Father", "value": fatherExpectationPercentage},
-                {"label":"Mother", "value": motherExpectationPercentage}
-              ];
+              var pieData = convertToPieData(fatherExpectationPercentage, motherExpectationPercentage);
 
               function updateArcs() {
                 // arc generator
                 var arc = d3.svg.arc().outerRadius(r);
-
-                var canvas = d3.selectAll("#pieCanvas")
-                  .selectAll("g.slice")
-                  .data(pieData);
-
                 // provides start angle, end angle, and value property
-                var pie = d3.layout.pie().value( function(d){ return d.value; });
-
+                var pie = d3.layout.pie().value(function(d){ return d.value; });
                 // Attach the new data to the bars
-                var arcs = canvas.data(pie)
-                  .selectAll("path")
-                  // everything about is added
-                  //.transition().duration(500)
+                var arcs = d3.selectAll("#pieCanvas")
+                  .selectAll("g.slice path")
+                  .data(pie(pieData))
+                  .transition().duration(500)
                   .attr("d", function (d) {
                     return arc(d);
                   })
                   .attr("fill", function(d, i){
-                    //return "red";
                     return colours[i];
                   });
+                console.log(arcs.select("g"));
+                // Update Labelling
+                var textArc = d3.selectAll("#pieCanvas")
+                  .selectAll("g.slice text")
+                  .data(pie(pieData))
+                  .transition().duration(500)
+                  .attr("transform", function(d){
+                    d.innerRadius = 0;
+                    d.outerRadius = r;
+                    return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
+                    return pieData[i].label;}
+                );
 
-                console.log("cnavas " + canvas);
-                console.log("arcs "  + arcs);
-
-                // Add tool tip
-                toolTipService.addToolTip(arcs, function() {
-                  return "Total Frequency:" + total + "  Mother:" + motherExpectationPercentage.toFixed(2) + "%" + "  Father:"
-                    + fatherExpectationPercentage.toFixed(2) + "%";
-                });
+                // Update text data within svg
+                var updateData = d3.selectAll("#pieCanvas")
+                  .selectAll("g.slice")
+                  .data(pie(pieData)).enter();
+                console.log(updateData);
               }
 
               // Update pie chart
