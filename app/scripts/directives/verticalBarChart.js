@@ -20,8 +20,10 @@ angular.module('pisaVisualisationApp')
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function(d3) {
 
-          //var colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
-          var colours = ["pink"];
+          var colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
+          var maleColor = "#003D00";
+          var femaleColor = "#007A00";
+          //var colours = ["pink"];
           var margin = { top: 0, right: 10, bottom: 100, left: 10 };
           var barWidth = 40;
           var height = 200;
@@ -123,10 +125,9 @@ angular.module('pisaVisualisationApp')
                   })
                   .attr("fill", function(d,i) {
                     if (isFatherQualification) {
-                      return "blue";
+                      return maleColor;
                     }
-                    return "red";
-                    //return colours[i % colours.length];
+                    return femaleColor;
                   });
 
                 toolTipService.addToolTip(bars, function(d) {
@@ -202,10 +203,9 @@ angular.module('pisaVisualisationApp')
                       d3.select(this).classed('selected', false);
                     }
                     if (isFatherQualification) {
-                      return "blue";
+                      return maleColor;
                     }
-                    return "red";
-                    //return colours[i % colours.length];
+                    return femaleColor;
                   });
               }
 
