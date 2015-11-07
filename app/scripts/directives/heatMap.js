@@ -31,49 +31,6 @@ angular.module('pisaVisualisationApp')
             qualifications = ["None", "ISCED L3A", "ISCED L4", "ISCED L5B", "ISCED L5A,6"],
             salary = [ "< $40k", "$40k < $55k", "$50k < $70k", "$70k < $85k", "$85k < $100k", "$100k+"];
 
-          var svg = d3.select(".chartBackdrop").append("svg")
-            .attr("id", "heatMapCanvas")
-            .attr("width", 100 + "%")
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-          // X Axis Title
-          svg.append("text")
-            .attr("x", (width / 2) - 120)
-            .attr("y", -(margin.top / 2))
-            .attr("text-anchor", "middle")
-            .style("font-size", "16px")
-            .text("Parent's Income (Dollars)");
-
-          // Y Axis Title
-          svg.append("text")
-            .attr("x", 20)
-            .attr("y", height/2)
-            .attr("text-anchor", "end")
-            .style("font-size", "16px")
-            .attr("transform", "rotate(270, " + (-margin.left + 90) + "," + (height/2) +  ")")
-            .text("Parent's Expectations (Education Lvl)");
-
-          // X Axis Labels
-          var timeLabels = svg.selectAll(".timeLabel")
-            .data(salary)
-            .enter().append("text")
-            .text(function(d) { return d; })
-            .attr("x", function(d, i) { return i * (gridWidth); })
-            .attr("y", 0)
-            .style("text-anchor", "middle")
-            .attr("transform", "translate(" + gridSize + ", -6)");
-
-          // Y Axis Labels
-          var dayLabels = svg.selectAll(".dayLabel")
-            .data(expectations)
-            .enter().append("text")
-            .text(function (d) { return d; })
-            .attr("x", 0)
-            .attr("y", function (d, i) { return i * gridHeight; })
-            .style("text-anchor", "end")
-            .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
           // Heat Map
           var heatmapChart = function(fileName) {
@@ -94,6 +51,50 @@ angular.module('pisaVisualisationApp')
               }), maxFreq = d3.max(data, function (d) {
                 return d.frequency;
               });
+
+              var svg = d3.select(".chartBackdrop").append("svg")
+                .attr("id", "heatMapCanvas")
+                .attr("width", 100 + "%")
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+              // X Axis Title
+              svg.append("text")
+                .attr("x", (width / 2) - 120)
+                .attr("y", -(margin.top / 2))
+                .attr("text-anchor", "middle")
+                .style("font-size", "16px")
+                .text("Parent's Income (Dollars)");
+
+              // Y Axis Title
+              svg.append("text")
+                .attr("x", 20)
+                .attr("y", height/2)
+                .attr("text-anchor", "end")
+                .style("font-size", "16px")
+                .attr("transform", "rotate(270, " + (-margin.left + 90) + "," + (height/2) +  ")")
+                .text("Parent's Expectations (Education Lvl)");
+
+              // X Axis Labels
+              var timeLabels = svg.selectAll(".timeLabel")
+                .data(salary)
+                .enter().append("text")
+                .text(function(d) { return d; })
+                .attr("x", function(d, i) { return i * (gridWidth); })
+                .attr("y", 0)
+                .style("text-anchor", "middle")
+                .attr("transform", "translate(" + gridSize + ", -6)");
+
+              // Y Axis Labels
+              var dayLabels = svg.selectAll(".dayLabel")
+                .data(expectations)
+                .enter().append("text")
+                .text(function (d) { return d; })
+                .attr("x", 0)
+                .attr("y", function (d, i) { return i * gridHeight; })
+                .style("text-anchor", "end")
+                .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
               var colorScale = d3.scale.quantile()
                 .domain([minFreq, maxFreq])
