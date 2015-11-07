@@ -111,7 +111,7 @@ angular.module('pisaVisualisationApp')
                   d.innerRadius = 0;
                   d.outerRadius = r;
                   return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
-                    return pieData[i].label + ": " + d.value.toFixed(2) + "%";
+                    return pieData[i].label + ": " + parseFloat(d.value * 100).toFixed(2) + "%";
                   }
                 );
 
@@ -189,7 +189,7 @@ angular.module('pisaVisualisationApp')
                     d.innerRadius = 0;
                     d.outerRadius = r;
                     return "translate(" + arc.centroid(d) + ")";}).attr("text-anchor", "middle").text( function(d, i) {
-                    return pieData[i].label + ": " + d.value.toFixed(2) + "%";
+                    return pieData[i].label + ": " + parseFloat(d.value * 100).toFixed(2) + "%";
                   });
 
                 // Update text data within svg
