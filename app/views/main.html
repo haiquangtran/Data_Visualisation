@@ -6,11 +6,40 @@
   </div>
 </div>
 
-<div class="parallax">
-  <div class="parallax-image">
-    <img src="images/bg8.jpg">
+<!--<div class="parallax">-->
+  <!--<div class="parallax-image">-->
+    <!--<img src="images/bg8.jpg">-->
+  <!--</div>-->
+<!--</div>-->
+
+<div class="jumbotron">
+  <h1>What Influences a Parent's Expectations for their Child?</h1>
+  <p class="lead">
+    <br>
+    Children can feel pressured when their parent's have such high expectations of them.
+    The following visualisations display the parent's educational expectations of their children.
+    Specifically, it displays a trend in the data where parent's that earn less, tend to have high
+    educational expectations for their child.
+  </p>
+</div>
+
+<div ng-app="pisaVisualisationApp" ng-controller="ParentsCtrl">
+  <div class="chartBackdrop">
+    <heat-map chart-data="parentTotalExpectationsFile" data-ng-click="setSelected(salary, expectation)"></heat-map>
+    <vertical-bar-chart chart-data="parentQualificationsFile" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></vertical-bar-chart>
+    <pie-chart chart-data="parentExpectationsFile" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></pie-chart>
   </div>
 </div>
 
 
+<div class="jumbotron">
+  <h1>Do Children Meet Their Parents Expectations?</h1>
+  <p class="lead">
+    <br>
+    Children can feel pressured when their parent's have such high expectations of them.
+    The following visualisations display the parent's educational expectations of their children.
+    Specifically, it displays a trend in the data where parent's that earn less, tend to have high
+    educational expectations for their child.
+  </p>
+</div>
 

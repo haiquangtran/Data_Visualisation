@@ -46,6 +46,7 @@ g.slice.selected path {
   border-radius: 6px;
   background: #eee;
   padding: 3px;
+  margin-bottom: 30px;
 }
 
 .chartBackdrop div {
