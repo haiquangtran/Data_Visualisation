@@ -69,6 +69,14 @@ angular.module('pisaVisualisationApp')
 
               var pieData = convertToPieData(fatherExpectationPercentage, motherExpectationPercentage);
 
+              var explode = function(x, index) {
+                var offset = index === 0? 10: 10;
+                var angle = (x.startAngle + x.endAngle) / 2;
+                var xOff = Math.sin(angle)*offset;
+                var yOff = -Math.cos(angle)*offset;
+                return "translate("+xOff+","+yOff+")";
+              };
+
               function createPieChart() {
                 var vis = d3.select(".chartBackdrop")
                   .append("svg:svg")
@@ -90,6 +98,12 @@ angular.module('pisaVisualisationApp')
                   })
                   .attr("d", function (d) {
                     return arc(d);
+                  })
+                  .on("mouseover", function(d) {
+                    arcs.transition().duration(500).attr("transform", explode);
+                  })
+                  .on("mouseout", function(d) {
+                    arcs.transition().duration(500).attr("transform", explode(d, false));
                   });
 
                 // add text
@@ -106,12 +120,12 @@ angular.module('pisaVisualisationApp')
                   var full = 1;
                   if (i === 0) {
                     // Mother
-                    return "Total Frequency:" + total + "  Mother:" + d.value.toFixed(2) + "%" + "  Father:"
-                      + (full-d.value).toFixed(2) + "%";
+                    return "Total Frequency:" + total + "  Mother:" + d.value.toFixed(2) * 100 + "%" + "  Father:"
+                      + (full-d.value).toFixed(2) * 100 + "%";
                   }
                   // Father
-                  return "Total Frequency:" + total + "  Mother:" + (full-d.value).toFixed(2) + "%" + "  Father:"
-                    + d.value.toFixed(2) + "%";
+                  return "Total Frequency:" + total + "  Mother:" + (full-d.value).toFixed(2) * 100 + "%" + "  Father:"
+                    + d.value.toFixed(2) * 100 + "%";
                 });
               }
 
@@ -165,7 +179,7 @@ angular.module('pisaVisualisationApp')
                   .attr("fill", function(d, i){
                     return colours[i];
                   });
-                console.log(arcs.select("g"));
+
                 // Update Labelling
                 var textArc = d3.selectAll("#pieCanvas")
                   .selectAll("g.slice text")
@@ -182,7 +196,6 @@ angular.module('pisaVisualisationApp')
                 var updateData = d3.selectAll("#pieCanvas")
                   .selectAll("g.slice")
                   .data(pie(pieData)).enter();
-                console.log(updateData);
               }
 
               // Update pie chart
