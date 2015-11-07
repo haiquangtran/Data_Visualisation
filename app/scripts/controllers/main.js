@@ -8,11 +8,9 @@
  * Controller of the pisaVisualisationApp
  */
 angular.module('pisaVisualisationApp')
-  .controller('MainCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-
+  .controller('MainCtrl', function ($scope, $location, $anchorScroll) {
+    //$scope.scrollTo = function(id) {
+    //  $location.hash(id);
+    //  $anchorScroll();
+    //}
   });

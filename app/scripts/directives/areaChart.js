@@ -45,7 +45,7 @@ angular.module('pisaVisualisationApp')
             .y0(height)
             .y1(function(d) { return y(d.close); });
 
-          var svg = d3.select(".chartBackdrop").append("svg")
+          var svg = d3.select(".chartBack").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")

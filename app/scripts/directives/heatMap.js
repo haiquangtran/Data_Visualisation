@@ -75,119 +75,119 @@ angular.module('pisaVisualisationApp')
             .style("text-anchor", "end")
             .attr("transform", "translate(-6," + gridHeight / 1.5 + ")");
 
+          // Heat Map
+          var heatmapChart = function(fileName) {
+            d3.csv(fileName, function(d) {
+              return {
+                expectation: preprocessorService.getIndexFromParentExpectations(d.expectation),
+                salary: preprocessorService.getIndexFromParentExpectations(d.salary),
+                frequency: parseInt(d.frequency)
+              };
+            }, function(error, data) {
+              // total
+              var total = d3.sum(data, function(d) {
+                return d.frequency;
+              });
+              // Min and Max
+              var minFreq = d3.min(data, function (d) {
+                return d.frequency;
+              }), maxFreq = d3.max(data, function (d) {
+                return d.frequency;
+              });
+
+              var colorScale = d3.scale.quantile()
+                .domain([minFreq, maxFreq])
+                .range(colours);
+
+              var heatRects = svg.selectAll(".hour")
+                .data(data, function(d) {return d.expectation +':'+d.salary;});
+
+              heatRects.append("title");
+
+              // Heat map rects
+              heatRects.enter().append("rect")
+                .attr("x", function(d) { return (d.salary) * gridWidth; })
+                .attr("y", function(d) { return (d.expectation) * gridHeight; })
+                .attr("rx", 4)
+                .attr("ry", 4)
+                .attr("class", "bordered")
+                .attr("width", gridWidth)
+                .attr("height", gridHeight)
+                .attr("background-color", colours[0]);
+
+              heatRects.transition().duration(1000)
+                .transition().ease("elastic")
+                .attr("fill", function(d) { return colorScale(d.frequency); });
+              heatRects.select("title").text(function(d) { return d.frequency; });
+              heatRects.exit().remove();
+
+              // Tool Tip
+              var tooltip = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "1")
+                .style("visibility", "hidden")
+                .style("width", "200px")
+                .style("height", "100px")
+                .style("background", "rgba(255,255, 255,0.8)")
+                .style("text-align", "center");
+
+              // Hover
+              heatRects.on("mouseover", function(d, i) {
+                d3.select(this).classed('selected', true);
+                // Hover Text
+                var popUpText = "Frequency:" + d.frequency;
+                tooltip.text(popUpText);
+                tooltip.style("visibility", "visible");
+
+
+                scope.onClickEvent({
+                  expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
+                  salary: preprocessorService.getParentSalaryFromIndex(d.salary)
+                });
+              }).on("mousemove", function() {
+                return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+              }).on("mouseout", function(d, i) {
+                d3.select(this).classed('selected', false);
+                tooltip.style("visibility", "hidden");
+              });
+
+              // Selection
+              heatRects.on("click", function(d) {
+                scope.onClickEvent({
+                  expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
+                  salary: preprocessorService.getParentSalaryFromIndex(d.salary)
+                });
+              });
+
+              // Draw legend
+              var legend = svg.selectAll(".legend")
+                .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+
+              legend.enter().append("g")
+                .attr("class", "legend");
+
+              legend.append("rect")
+                .attr("x", function(d, i) { return legendElementWidth * i; })
+                .attr("y", height)
+                .attr("width", legendElementWidth)
+                .attr("height", gridSize / 2)
+                .attr("fill", function(d, i) { return colours[i]; });
+
+              legend.append("text")
+                .attr("class", "mono")
+                .text(function(d) { return "≥ " + Math.round(d); })
+                .attr("x", function(d, i) { return legendElementWidth * i; })
+                .attr("y", height + gridSize);
+
+              legend.exit().remove();
+            });
+          };
+
           scope.$watch('data', function(fileName) {
             if (!fileName) {
               return;
             }
-
-            // Heat Map
-            var heatmapChart = function(fileName) {
-              d3.csv(fileName, function(d) {
-                return {
-                  expectation: preprocessorService.getIndexFromParentExpectations(d.expectation),
-                  salary: preprocessorService.getIndexFromParentExpectations(d.salary),
-                  frequency: parseInt(d.frequency)
-                };
-              }, function(error, data) {
-                // total
-                var total = d3.sum(data, function(d) {
-                  return d.frequency;
-                });
-                // Min and Max
-                var minFreq = d3.min(data, function (d) {
-                  return d.frequency;
-                }), maxFreq = d3.max(data, function (d) {
-                  return d.frequency;
-                });
-
-                var colorScale = d3.scale.quantile()
-                  .domain([minFreq, maxFreq])
-                  .range(colours);
-
-                var heatRects = svg.selectAll(".hour")
-                  .data(data, function(d) {return d.expectation +':'+d.salary;});
-
-                heatRects.append("title");
-
-                // Heat map rects
-                heatRects.enter().append("rect")
-                  .attr("x", function(d) { return (d.salary) * gridWidth; })
-                  .attr("y", function(d) { return (d.expectation) * gridHeight; })
-                  .attr("rx", 4)
-                  .attr("ry", 4)
-                  .attr("class", "bordered")
-                  .attr("width", gridWidth)
-                  .attr("height", gridHeight)
-                  .attr("background-color", colours[0]);
-
-                heatRects.transition().duration(1000)
-                  .transition().ease("elastic")
-                  .attr("fill", function(d) { return colorScale(d.frequency); });
-                heatRects.select("title").text(function(d) { return d.frequency; });
-                heatRects.exit().remove();
-
-                // Tool Tip
-                var tooltip = d3.select("body")
-                  .append("div")
-                  .style("position", "absolute")
-                  .style("z-index", "1")
-                  .style("visibility", "hidden")
-                  .style("width", "200px")
-                  .style("height", "100px")
-                  .style("background", "rgba(255,255, 255,0.8)")
-                  .style("text-align", "center");
-
-                // Hover
-                heatRects.on("mouseover", function(d, i) {
-                  d3.select(this).classed('selected', true);
-                  // Hover Text
-                  var popUpText = "Frequency:" + d.frequency;
-                  tooltip.text(popUpText);
-                  tooltip.style("visibility", "visible");
-
-
-                  scope.onClickEvent({
-                    expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
-                    salary: preprocessorService.getParentSalaryFromIndex(d.salary)
-                  });
-                }).on("mousemove", function() {
-                  return tooltip.style("top" , (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-                }).on("mouseout", function(d, i) {
-                  d3.select(this).classed('selected', false);
-                  tooltip.style("visibility", "hidden");
-                });
-
-                // Selection
-                heatRects.on("click", function(d) {
-                  scope.onClickEvent({
-                    expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
-                    salary: preprocessorService.getParentSalaryFromIndex(d.salary)
-                  });
-                });
-
-                // Draw legend
-                var legend = svg.selectAll(".legend")
-                  .data([0].concat(colorScale.quantiles()), function(d) { return d; });
-
-                legend.enter().append("g")
-                  .attr("class", "legend");
-
-                legend.append("rect")
-                  .attr("x", function(d, i) { return legendElementWidth * i; })
-                  .attr("y", height)
-                  .attr("width", legendElementWidth)
-                  .attr("height", gridSize / 2)
-                  .attr("fill", function(d, i) { return colours[i]; });
-
-                legend.append("text")
-                  .attr("class", "mono")
-                  .text(function(d) { return "≥ " + Math.round(d); })
-                  .attr("x", function(d, i) { return legendElementWidth * i; })
-                  .attr("y", height + gridSize);
-
-                legend.exit().remove();
-              });
-            };
 
             heatmapChart(fileName);
 

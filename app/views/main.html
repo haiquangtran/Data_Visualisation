@@ -12,7 +12,7 @@
   <!--</div>-->
 <!--</div>-->
 
-<div class="jumbotron">
+<div id="parents" class="jumbotron">
   <h1>What Influences a Parent's Expectations for their Child?</h1>
   <p class="lead">
     <br>
@@ -31,8 +31,7 @@
   </div>
 </div>
 
-
-<div class="jumbotron">
+<div id="children" class="jumbotron">
   <h1>Do Children Meet Their Parents Expectations?</h1>
   <p class="lead">
     <br>
@@ -43,3 +42,8 @@
   </p>
 </div>
 
+<div ng-app="pisaVisualisationApp" ng-controller="Vis3Ctrl">
+  <div class="chartBack">
+    <area-chart chart-data="test" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></area-chart>
+  </div>
+</div>
