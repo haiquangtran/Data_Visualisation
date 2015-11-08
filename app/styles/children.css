@@ -22,3 +22,12 @@
   color: white;
   box-shadow: 2px 2px 2px #666;
 }
+
+/* Animations. */
+
+#children {
+  /*-webkit-transition: all 1s ease;*/
+  /*-moz-transition: all 1s ease;*/
+  /*-o-transition: all 1s ease;*/
+  /*transition: all 1s ease;*/
+}

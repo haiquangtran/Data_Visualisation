@@ -1,3 +1,10 @@
+.browse-happy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
 body {
   padding: 0;
 }
@@ -79,8 +86,6 @@ body {
 /* Hero Image */
 .parallax {
   width: 100%;
-  /*top:0;*/
-  /*bottom: 0;*/
   overflow: hidden;
   display: block;
   position: relative;

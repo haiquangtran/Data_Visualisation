@@ -9,8 +9,6 @@
  */
 angular.module('pisaVisualisationApp')
   .controller('MainCtrl', function ($scope, $location, $anchorScroll) {
-    //$scope.scrollTo = function(id) {
-    //  $location.hash(id);
-    //  $anchorScroll();
-    //}
+
+
   });
