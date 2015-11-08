@@ -77,17 +77,55 @@ angular.module('pisaVisualisationApp')
                 .attr("transform", "rotate(-90)" );
 
               // Y Axis
-              svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
-                .text("Value ($)");
+              //svg.append("g")
+              //  .attr("class", "y axis")
+              //  .call(yAxis)
+              //  .append("text")
+              //  .attr("transform", "rotate(-90)")
+              //  .attr("y", 6)
+              //  .attr("dy", ".71em")
+              //  .style("text-anchor", "end")
+              //  .text("Value ($)");
 
-              // create bars for mother
+              function addBarText(svg, isFatherQualification) {
+                var qualificationClass;
+                if (isFatherQualification) {
+                  qualificationClass = "fatherQualifications";
+                } else {
+                  qualificationClass = "motherQualifications";
+                }
+                // Text
+                var barText = svg.selectAll("barText").data(
+                  data.filter(function(d) {
+                      // Filter
+                      if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
+                        return d;
+                      }
+                    }
+                  )).enter().append("text")
+                  .text(function(d) {
+                    if (isFatherQualification) {
+                      return d.fatherFrequency;
+                    }
+                    return d.motherFrequency;
+                  })
+                  .attr("x", function(d, i) {
+                    if (isFatherQualification) {
+                      return margin.left + (barWidth) + (barWidth*2) * (i);
+                    }
+                    return margin.left + (barWidth*2) * (i);
+                  })
+                  .attr("y", function(d) {
+                    if (isFatherQualification) {
+                      return height - (d.fatherFrequency);
+                    }
+                    return height - (d.motherFrequency);
+                  })
+                  .attr("class", qualificationClass)
+                  .attr("text-anchor", "start");
+              }
+
+              // create bars for parents
               function createBars(isFatherQualification) {
                 var qualificationClass;
                 if (isFatherQualification) {
@@ -95,8 +133,8 @@ angular.module('pisaVisualisationApp')
                 } else {
                   qualificationClass = "motherQualifications";
                 }
-                var bars = svg.selectAll("motherRect").data(
-                  data.filter(function(d){
+                var bars = svg.selectAll("barRect").data(
+                  data.filter(function(d) {
                       // Filter
                       if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
                         return d;
@@ -130,6 +168,8 @@ angular.module('pisaVisualisationApp')
                     return femaleColor;
                   });
 
+                addBarText(svg, isFatherQualification);
+
                 toolTipService.addToolTip(bars, function(d) {
                   var hoverText = " Parent's Income: " + d.salary + " Parent's Expectations: " + d.expectation + "\n"
                     + "Mother freq: " + parseInt(d.motherFrequency) + "  Father freq: " +  parseInt(d.fatherFrequency)
@@ -160,6 +200,27 @@ angular.module('pisaVisualisationApp')
                 fatherFrequency: parseInt(d.fatherFrequency)
               };
             }, function(error, data) {
+
+              function updateBarText(isFatherQualification) {
+                var qualificationText;
+                if (isFatherQualification) {
+                  qualificationText = "text.fatherQualifications";
+                } else {
+                  qualificationText = "text.motherQualifications";
+                }
+
+                // Update the Text
+                var barText = d3.selectAll("#barCanvas")
+                  .selectAll(qualificationText)
+                  .data(data.filter(function(d){
+                    // Filter
+                    if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
+                      return d;
+                    }
+                  })).text(function() {
+                    return "PLACEHOLDER";
+                  });
+              }
 
               function updateBars(isFatherQualification) {
                 var qualificationRect;
@@ -207,6 +268,8 @@ angular.module('pisaVisualisationApp')
                     }
                     return femaleColor;
                   });
+
+                updateBarText(isFatherQualification);
               }
 
               // Update bars for father qualifications
