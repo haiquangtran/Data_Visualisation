@@ -9,5 +9,4 @@
  */
 angular.module('pisaVisualisationApp')
   .controller('MainCtrl', function ($scope, $location, $anchorScroll, $document) {
-
   });
