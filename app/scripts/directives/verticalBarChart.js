@@ -23,7 +23,6 @@ angular.module('pisaVisualisationApp')
           var colours = ['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00', '#001F00'];
           var maleColor = "#003D00";
           var femaleColor = "#007A00";
-          //var colours = ["pink"];
           var margin = { top: 0, right: 10, bottom: 100, left: 10 };
           var barWidth = 50;
           var height = 250;
