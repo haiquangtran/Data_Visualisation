@@ -7,7 +7,7 @@
  * # verticalBarChart
  */
 angular.module('pisaVisualisationApp')
-  .directive('verticalBarChart', function (d3Service, toolTipService) {
+  .directive('verticalBarChart', function (d3Service, toolTipService, helperService) {
     return {
       restrict: 'E',
       replace: false,
@@ -25,41 +25,57 @@ angular.module('pisaVisualisationApp')
           var femaleColor = "#007A00";
           //var colours = ["pink"];
           var margin = { top: 0, right: 10, bottom: 100, left: 10 };
-          var barWidth = 40;
-          var height = 200;
-          var width = 500;
+          var barWidth = 50;
+          var height = 250;
+          var width = 600;
 
-          var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
-          var y = d3.scale.linear().range([height, 0]);
+          function calculateBarHeight(d, total, isFatherQualification) {
+            var scaleFactor = 2.1;
+            var padding = 10;
 
-          var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            .ticks(10);
-          var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left")
-            .ticks(10);
+            if (isFatherQualification) {
+              return padding + ((helperService.toPercentage(d.fatherFrequency, total)) * height * scaleFactor);
+            }
+            return padding + ((helperService.toPercentage(d.motherFrequency, total)) * height * scaleFactor);
+          }
+
+          function calculateBarY(d, total, isFatherQualification) {
+            return height - calculateBarHeight(d, total, isFatherQualification);
+          }
 
           var barChart = function(fileName, selectedExpectation, selectedSalary) {
             d3.csv(fileName, function(d) {
-              return {
-                expectation: d.expectation,
-                salary: d.salary,
-                motherQualification: d.motherQualification,
-                motherFrequency: parseInt(d.motherFrequency),
-                fatherQualification: d.fatherQualification,
-                fatherFrequency: parseInt(d.fatherFrequency)
-              };
+              // Filter
+              if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
+                return {
+                  expectation: d.expectation,
+                  salary: d.salary,
+                  motherQualification: d.motherQualification,
+                  motherFrequency: parseInt(d.motherFrequency),
+                  fatherQualification: d.fatherQualification,
+                  fatherFrequency: parseInt(d.fatherFrequency)
+                };
+              }
             }, function(error, data) {
-              x.domain(data.map(function(d) { return d.motherQualification; }));
-              //y.domain([0, d3.max(data, function(d) { return d.motherFrequency+d.fatherFrequency; })]);
+              var total = helperService.getTotal(data);
+              var maxValue = helperService.getMaxFrequencyOutOfParents(data);
+              var xLabels = [];
+              data.map(function(d) {
+                xLabels.push(d.motherQualification);
+              });
+
+              var x = d3.scale.ordinal().rangePoints([10, barWidth*10-90]);
+              var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .ticks(10);
+              x.domain(xLabels);
 
               //Create SVG element
               var svg = d3.select(".chartBackdrop").append("svg")
                 .attr("id", "barCanvas")
                 .attr("x", 0)
-                .attr("width", 50 + "%")
+                .attr("width", 60 + "%")
                 .attr("height", height + margin.top + margin.bottom)
                 .style("background-color", "dark-grey")
                 .append("g")
@@ -68,24 +84,13 @@ angular.module('pisaVisualisationApp')
               // X Axis
               svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(" + barWidth + "," + height + ")")
                 .call(xAxis)
                 .selectAll("text")
                 .style("text-anchor", "end")
                 .attr("dx", "-.8em")
                 .attr("dy", "-.55em")
                 .attr("transform", "rotate(-90)" );
-
-              // Y Axis
-              //svg.append("g")
-              //  .attr("class", "y axis")
-              //  .call(yAxis)
-              //  .append("text")
-              //  .attr("transform", "rotate(-90)")
-              //  .attr("y", 6)
-              //  .attr("dy", ".71em")
-              //  .style("text-anchor", "end")
-              //  .text("Value ($)");
 
               function addBarText(svg, isFatherQualification) {
                 var qualificationClass;
@@ -95,19 +100,14 @@ angular.module('pisaVisualisationApp')
                   qualificationClass = "motherQualifications";
                 }
                 // Text
-                var barText = svg.selectAll("barText").data(
-                  data.filter(function(d) {
-                      // Filter
-                      if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
-                        return d;
-                      }
-                    }
-                  )).enter().append("text")
+                var barText = svg.selectAll("barText")
+                  .data(data)
+                  .enter().append("text")
                   .text(function(d) {
                     if (isFatherQualification) {
-                      return d.fatherFrequency;
+                      return helperService.toFullPercentage(d.fatherFrequency, total) + '%';
                     }
-                    return d.motherFrequency;
+                    return helperService.toFullPercentage(d.motherFrequency, total) + '%';
                   })
                   .attr("x", function(d, i) {
                     if (isFatherQualification) {
@@ -116,10 +116,7 @@ angular.module('pisaVisualisationApp')
                     return margin.left + (barWidth*2) * (i);
                   })
                   .attr("y", function(d) {
-                    if (isFatherQualification) {
-                      return height - (d.fatherFrequency);
-                    }
-                    return height - (d.motherFrequency);
+                    return calculateBarY(d, total, isFatherQualification);
                   })
                   .attr("class", qualificationClass)
                   .attr("text-anchor", "start");
@@ -133,14 +130,8 @@ angular.module('pisaVisualisationApp')
                 } else {
                   qualificationClass = "motherQualifications";
                 }
-                var bars = svg.selectAll("barRect").data(
-                  data.filter(function(d) {
-                      // Filter
-                      if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
-                        return d;
-                      }
-                    }
-                  )).enter().append("rect");
+                var bars = svg.selectAll("barRect").data(data)
+                  .enter().append("rect");
                 bars
                   .attr("class", qualificationClass)
                   .attr("x", function(d, i) {
@@ -149,17 +140,11 @@ angular.module('pisaVisualisationApp')
                     }
                     return margin.left + (barWidth*2) * (i);
                   }).attr("y", function(d) {
-                    if (isFatherQualification) {
-                      return height - (d.fatherFrequency);
-                    }
-                    return height - (d.motherFrequency);
+                    return calculateBarY(d, total, isFatherQualification);
                   }).attr("width", barWidth)
                   .transition().ease("elastic")
                   .attr("height", function(d) {
-                    if (isFatherQualification) {
-                      return (d.fatherFrequency);
-                    }
-                    return (d.motherFrequency);
+                    return calculateBarHeight(d, total, isFatherQualification);
                   })
                   .attr("fill", function(d,i) {
                     if (isFatherQualification) {
@@ -191,15 +176,19 @@ angular.module('pisaVisualisationApp')
           function updateBarChart(fileName, selectedExpectation, selectedSalary) {
             // Get the data again
             d3.csv(fileName, function(d) {
-              return {
-                expectation: d.expectation,
-                salary: d.salary,
-                motherQualification: d.motherQualification,
-                motherFrequency: parseInt(d.motherFrequency),
-                fatherQualification: d.fatherQualification,
-                fatherFrequency: parseInt(d.fatherFrequency)
-              };
+              if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
+                return {
+                  expectation: d.expectation,
+                  salary: d.salary,
+                  motherQualification: d.motherQualification,
+                  motherFrequency: parseInt(d.motherFrequency),
+                  fatherQualification: d.fatherQualification,
+                  fatherFrequency: parseInt(d.fatherFrequency)
+                }
+              }
             }, function(error, data) {
+              var total = helperService.getTotal(data);
+              var maxValue = helperService.getMaxFrequencyOutOfParents(data);
 
               function updateBarText(isFatherQualification) {
                 var qualificationText;
@@ -212,13 +201,16 @@ angular.module('pisaVisualisationApp')
                 // Update the Text
                 var barText = d3.selectAll("#barCanvas")
                   .selectAll(qualificationText)
-                  .data(data.filter(function(d){
-                    // Filter
-                    if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
-                      return d;
+                  .data(data)
+                  .transition().duration(500)
+                  .attr("y", function(d) {
+                    return calculateBarY(d, total, isFatherQualification);
+                  })
+                  .text(function(d) {
+                    if (isFatherQualification) {
+                      return helperService.toFullPercentage(d.fatherFrequency, total) + '%';
                     }
-                  })).text(function() {
-                    return "PLACEHOLDER";
+                    return helperService.toFullPercentage(d.motherFrequency, total) + '%';
                   });
               }
 
@@ -232,12 +224,7 @@ angular.module('pisaVisualisationApp')
                 // Attach the new data to the bars
                 var bars = d3.selectAll("#barCanvas")
                   .selectAll(qualificationRect)
-                  .data(data.filter(function(d){
-                    // Filter
-                    if (d.expectation === selectedExpectation && d.salary === selectedSalary) {
-                      return d;
-                    }
-                  }))
+                  .data(data)
                   .transition().duration(500)
                   .attr("x", function(d, i) {
                     if (isFatherQualification) {
@@ -245,15 +232,9 @@ angular.module('pisaVisualisationApp')
                     }
                     return margin.left + (barWidth*2) * (i);
                   }).attr("y", function(d) {
-                    if (isFatherQualification) {
-                      return height - (d.fatherFrequency);
-                    }
-                    return height - (d.motherFrequency);
+                    return calculateBarY(d, total, isFatherQualification);
                   }).attr("height", function(d) {
-                    if (isFatherQualification) {
-                      return (d.fatherFrequency);
-                    }
-                    return (d.motherFrequency);
+                    return calculateBarHeight(d, total, isFatherQualification);
                   })
                   .attr("width", barWidth)
                   .transition().ease("elastic")

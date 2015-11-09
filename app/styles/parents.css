@@ -10,16 +10,17 @@ text.mono {
   color: black;
 }
 
-/* Heat Map Selected */
 rect.selected {
-  fill: yellow;
+  fill: #00AC7F;
 }
-
+rect.selected-father {
+  fill: #036C51;
+}
 /* Pie Chart Selected */
 #pieCanvas {
 }
 g.slice.selected path {
-  fill: yellow;
+  fill: #00AC7F;
 }
 
 /* Bar Chart */
@@ -37,15 +38,6 @@ g.slice.selected path {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
-}
-
-/* Animations. */
-
-#parents {
-  /*-webkit-transition: all 1s ease;*/
-  /*-moz-transition: all 1s ease;*/
-  /*-o-transition: all 1s ease;*/
-  /*transition: all 1s ease;*/
 }
 
 /* Chart */

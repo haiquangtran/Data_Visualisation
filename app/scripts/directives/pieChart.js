@@ -20,7 +20,7 @@ angular.module('pisaVisualisationApp')
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function(d3) {
 
-          var margin = { top: 50, right: 10, bottom: 100, left: 100 };
+          var margin = { top: 50, right: 10, bottom: 100, left: 50 };
           var w = 400;
           var h = 400;
           var r = h/3;
@@ -82,7 +82,7 @@ angular.module('pisaVisualisationApp')
                   .append("svg:svg")
                   .attr("id", "pieCanvas")
                   .data([pieData])
-                  .attr("width", w)
+                  .attr("width", 40 + "%")
                   .attr("height", h)
                   .append("svg:g")
                   .attr("transform", "translate(" + (r + margin.left)  + "," + (r + margin.top) + ")");
@@ -115,17 +115,23 @@ angular.module('pisaVisualisationApp')
                   }
                 );
 
+                // TODO: fix
+                var isFather = false;
                 // Add tool tip
-                toolTipService.addToolTip(arcs, function(d, i) {
-                  var full = 1;
-                  if (i === 0) {
+                toolTipService.addToolTip(arcs, function(d) {
+                  if (isFather) {
+                    isFather = true;
+                    // Father
+                    return "Total Frequency:" + total;
+                    //return "Total Frequency:" + total + "  Mother:" + (parseFloat(parseInt(1)-d.value) * 100).toFixed(2) + "%" + "  Father:"
+                    //  + parseFloat(d.value * 100).toFixed(2) + "%";
+                  } else {
+                    isFather = false;
                     // Mother
-                    return "Total Frequency:" + total + "  Mother:" + d.value.toFixed(2) * 100 + "%" + "  Father:"
-                      + (full-d.value).toFixed(2) * 100 + "%";
+                    return "Total Frequency:" + total;
+                    //return "Total Frequency:" + total + "  Mother:" + (parseFloat(parseInt(1)-d.value) * 100).toFixed(2) + "%" + "  Father:"
+                    //  + parseFloat(d.value * 100).toFixed(2) + "%";
                   }
-                  // Father
-                  return "Total Frequency:" + total + "  Mother:" + (full-d.value).toFixed(2) * 100 + "%" + "  Father:"
-                    + d.value.toFixed(2) * 100 + "%";
                 });
               }
 

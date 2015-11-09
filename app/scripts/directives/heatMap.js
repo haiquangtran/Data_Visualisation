@@ -141,7 +141,6 @@ angular.module('pisaVisualisationApp')
                 tooltip.text(popUpText);
                 tooltip.style("visibility", "visible");
 
-
                 scope.onClickEvent({
                   expectation: preprocessorService.getParentExpectationsFromIndex(d.expectation),
                   salary: preprocessorService.getParentSalaryFromIndex(d.salary)
