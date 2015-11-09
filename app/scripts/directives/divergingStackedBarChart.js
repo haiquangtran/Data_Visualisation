@@ -17,7 +17,7 @@ angular.module('pisaVisualisationApp')
       },
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function () {
-          var margin = {top: 50, right: 20, bottom: 10, left: 65},
+          var margin = {top: 50, right: 20, bottom: 10, left: 100},
             width = 800 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
@@ -65,8 +65,6 @@ angular.module('pisaVisualisationApp')
               });
 
               var min_val = d3.min(data, function (d) {
-                console.log(d.boxes);
-
                 return d.boxes["0"].x0;
               });
 
@@ -192,7 +190,6 @@ angular.module('pisaVisualisationApp')
               return;
             }
 
-            console.log("SWITHCED ");
             if (selectedExpectation != oldValues[1]) {
               //updateBarChart(fileName, selectedExpectation, selectedSalary);
               createStackedGraph(fileName, selectedExpectation);
