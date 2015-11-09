@@ -42,6 +42,30 @@ angular.module('pisaVisualisationApp')
       return dir + "parents_expectations_vs_feelings.csv"
     }
 
+    function getFileNameSchoolFeelings_l2() {
+      return dir + "school_feelings_l2.csv"
+    }
+
+    function getFileNameSchoolFeelings_l3() {
+      return dir + "school_feelings_l3.csv"
+    }
+
+    function getFileNameSchoolFeelings_l3A() {
+      return dir + "school_feelings_l3A.csv"
+    }
+
+    function getFileNameSchoolFeelings_l4() {
+      return dir + "school_feelings_l4.csv"
+    }
+
+    function getFileNameSchoolFeelings_l5B() {
+      return dir + "school_feelings_l5B.csv"
+    }
+
+    function getFileNameSchoolFeelings_l6() {
+      return dir + "school_feelings_l6.csv"
+    }
+
     // Public API here
     return {
       getFileNameStudents: getFileNameStudents(),
@@ -51,6 +75,12 @@ angular.module('pisaVisualisationApp')
       getFileNameTotalParentsQualifications: getFileNameTotalParentsQualifications(),
       getFileNameParentsExpectations: getFileNameParentsExpectations(),
       getFileNameTotalFeelings: getFileNameTotalFeelings(),
+      getFileNameSchoolFeelings_l2: getFileNameSchoolFeelings_l2(),
+      getFileNameSchoolFeelings_l3: getFileNameSchoolFeelings_l3(),
+      getFileNameSchoolFeelings_l3A: getFileNameSchoolFeelings_l3A(),
+      getFileNameSchoolFeelings_l4: getFileNameSchoolFeelings_l4(),
+      getFileNameSchoolFeelings_l5B: getFileNameSchoolFeelings_l5B(),
+      getFileNameSchoolFeelings_l6: getFileNameSchoolFeelings_l6(),
       test: dir + "test.csv",
       getFileNameRaw: dir + "raw.csv"
     };

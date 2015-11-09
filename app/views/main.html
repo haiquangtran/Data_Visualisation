@@ -26,7 +26,7 @@
 </div>
 
 <div id="children" class="jumbotron">
-  <h1>Do Children Meet Their Parents Expectations?</h1>
+  <h1>Do parents expectations affect how their child feels about school?</h1>
   <p class="lead">
     <br>
     Children can feel pressured when their parent's have such high expectations of them.
@@ -38,7 +38,15 @@
 
 <div ng-app="pisaVisualisationApp" ng-controller="ChildrenCtrl">
   <div class="chartBack">
-    <area-chart chart-data="test" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></area-chart>
-    <diverging-stacked-bar-chart chart-data="rawFile"></diverging-stacked-bar-chart>
+    <div class="pisa-buttons">
+      <button type="button" class="btn btn-success" ng-click="switchDataset('ISCED lv2')">ISCED lv2</button>
+      <button type="button" class="btn btn-success" ng-click="switchDataset('ISCED lv3B,C')">ISCED lv3B,C</button>
+      <button type="button" class="btn btn-success" ng-click="switchDataset('ISCED lv3A')">ISCED lv3A</button>
+      <button type="button" class="btn btn-success" ng-click="switchDataset('ISCED lv4')">ISCED lv4</button>
+      <button type="button" class="btn btn-success" ng-click="switchDataset('ISCED lv5B')">ISCED lv5B</button>
+      <button type="button" class="btn btn-success" ng-click="switchDataset('ISCED lv5A,6')">ISCED lv5A,6</button>
+    </div>
+    <diverging-stacked-bar-chart chart-data="schoolFeelingsFile" selected-expectation="selectedExpectation"></diverging-stacked-bar-chart>
+    <!--<area-chart chart-data="test" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></area-chart>-->
   </div>
 </div>

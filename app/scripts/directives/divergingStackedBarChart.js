@@ -7,11 +7,14 @@
  * # divergingStackedBarChart
  */
 angular.module('pisaVisualisationApp')
-  .directive('divergingStackedBarChart', function (d3Service) {
+  .directive('divergingStackedBarChart', function (d3Service, fileService) {
     return {
       restrict: 'E',
       replace: false,
-      scope: {data: '=chartData'},
+      scope: {
+        data: '=chartData',
+        selectedExpectation: '=selectedExpectation'
+      },
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function () {
           var margin = {top: 50, right: 20, bottom: 10, left: 65},
@@ -25,7 +28,7 @@ angular.module('pisaVisualisationApp')
             .rangeRound([0, width]);
 
           var color = d3.scale.ordinal()
-            .range(['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00']);
+            .range(['#A0CAA0', '#66C266', '#007A00', '#003D00']);
 
           var xAxis = d3.svg.axis()
             .scale(x)
@@ -33,7 +36,7 @@ angular.module('pisaVisualisationApp')
 
           var yAxis = d3.svg.axis()
             .scale(y)
-            .orient("left")
+            .orient("left");
 
           var svg = d3.select(element[0]).append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -42,32 +45,33 @@ angular.module('pisaVisualisationApp')
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-          color.domain(["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]);
+          color.domain(["Strongly disagree", "Disagree", "Agree", "Strongly agree"]);
 
-          scope.$watch('data', function(fileName) {
-            if(!fileName){ return; }
-
+          function createStackedGraph(fileName) {
             d3.csv(fileName, function(error, data) {
               data.forEach(function (d) {
                 // calc percentages
                 d["Strongly disagree"] = +d[1] * 100 / d.N;
-                d["Disagree"] = +d[2] * 100 / d.N;
-                d["Neither agree nor disagree"] = +d[3] * 100 / d.N;
-                d["Agree"] = +d[4] * 100 / d.N;
-                d["Strongly agree"] = +d[5] * 100 / d.N;
-                var x0 = -1 * (d["Neither agree nor disagree"] / 2 + d["Disagree"] + d["Strongly disagree"]);
+                d["Disagree"] = +d[2]  * 100 / d.N;
+                d["Agree"] = +d[3]  * 100 / d.N;
+                d["Strongly agree"] = +d[4]  * 100 / d.N;
+                var x0 = -1 * (d["Agree"] / 2 + d["Disagree"] + d["Strongly disagree"]);
                 var idx = 0;
                 d.boxes = color.domain().map(function (name) {
-                  return {name: name, x0: x0, x1: x0 += +d[name], N: +d.N, n: +d[idx += 1]};
+                  return {
+                    name: name, x0: x0, x1: x0 += +d[name], N: +d.N, n: +d[idx+=1]
+                  };
                 });
               });
 
               var min_val = d3.min(data, function (d) {
+                console.log(d.boxes);
+
                 return d.boxes["0"].x0;
               });
 
               var max_val = d3.max(data, function (d) {
-                return d.boxes["4"].x1;
+                return d.boxes["3"].x1;
               });
 
               x.domain([min_val, max_val]).nice();
@@ -178,9 +182,26 @@ angular.module('pisaVisualisationApp')
 
               var movesize = width / 2 - startp.node().getBBox().width / 2;
               d3.selectAll(".legendbox").attr("transform", "translate(" + movesize + ",0)");
-
             });
+          };
+
+          scope.$watchGroup(['data', 'selectedExpectation'], function(newValues, oldValues, scope) {
+            var fileName = newValues[0];
+            var selectedExpectation = newValues[1];
+            if (!fileName) {
+              return;
+            }
+
+            console.log("SWITHCED ");
+            if (selectedExpectation != oldValues[1]) {
+              //updateBarChart(fileName, selectedExpectation, selectedSalary);
+              createStackedGraph(fileName, selectedExpectation);
+
+            } else {
+              createStackedGraph(fileName, selectedExpectation);
+            }
           });
+
         });
       }
     };
