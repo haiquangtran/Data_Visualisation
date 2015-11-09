@@ -46,7 +46,8 @@ angular.module('pisaVisualisationApp')
       getFileNameTotalParentsExpectations: getFileNameTotalParentsExpectations(),
       getFileNameTotalParentsQualifications: getFileNameTotalParentsQualifications(),
       getFileNameParentsExpectations: getFileNameParentsExpectations(),
-      test: dir + "test.csv"
+      test: dir + "test.csv",
+      getFileNameRaw: dir + "raw.csv"
     };
   });
 

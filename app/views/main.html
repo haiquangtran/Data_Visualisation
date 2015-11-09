@@ -36,8 +36,9 @@
   </p>
 </div>
 
-<div ng-app="pisaVisualisationApp" ng-controller="Vis3Ctrl">
+<div ng-app="pisaVisualisationApp" ng-controller="ChildrenCtrl">
   <div class="chartBack">
     <area-chart chart-data="test" selected-salary="selectedSalary" selected-expectation="selectedExpectation"></area-chart>
+    <diverging-stacked-bar-chart chart-data="rawFile"></diverging-stacked-bar-chart>
   </div>
 </div>

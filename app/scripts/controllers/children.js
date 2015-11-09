@@ -14,7 +14,9 @@ angular.module('pisaVisualisationApp')
     $scope.selectedSalary = "Less than <$A>";
     $scope.selectedExpectation = "ISCED lv2";
     $scope.parentTotalExpectationsFile = fileService.getFileNameTotalParentsExpectations;
-
+    // TODO: real data
+    $scope.rawFile = fileService.getFileNameRaw;
+    $scope.test = fileService.test;
 
     // Set selected values from heat map when button clicked
     $scope.setSelected = function(salary, expectation) {

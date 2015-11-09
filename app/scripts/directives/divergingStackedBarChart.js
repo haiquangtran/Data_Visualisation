@@ -14,7 +14,6 @@ angular.module('pisaVisualisationApp')
       scope: {data: '=chartData'},
       link: function postLink(scope, element, attrs) {
         d3Service.d3().then(function () {
-
           var margin = {top: 50, right: 20, bottom: 10, left: 65},
             width = 800 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
@@ -26,7 +25,7 @@ angular.module('pisaVisualisationApp')
             .rangeRound([0, width]);
 
           var color = d3.scale.ordinal()
-            .range(["#c7001e", "#f6a580", "#cccccc", "#92c6db", "#086fad"]);
+            .range(['#A0CAA0', '#66C266', '#007A00', '#005C00', '#003D00']);
 
           var xAxis = d3.svg.axis()
             .scale(x)
@@ -45,10 +44,11 @@ angular.module('pisaVisualisationApp')
 
           color.domain(["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]);
 
-          scope.$watch('data', function(fileName){
+          scope.$watch('data', function(fileName) {
             if(!fileName){ return; }
 
             d3.csv(fileName, function(error, data) {
+              console.log(fileName)
               data.forEach(function (d) {
                 // calc percentages
                 d["Strongly disagree"] = +d[1] * 100 / d.N;
@@ -76,13 +76,13 @@ angular.module('pisaVisualisationApp')
                 return d.Question;
               }));
 
-              svg.append("g")
+              svg.select('.chartBack').append("g")
                 .attr("class", "x axis")
                 .call(xAxis);
 
               svg.append("g")
                 .attr("class", "y axis")
-                .call(yAxis)
+                .call(yAxis);
 
               var vakken = svg.selectAll(".question")
                 .data(data)
