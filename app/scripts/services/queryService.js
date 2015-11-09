@@ -81,17 +81,29 @@ angular.module('pisaVisualisationApp')
           // salary
           result.push(salaryAnswerArray[j]);
           // father freq
-          result.push(calculateExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "father"));
+          result.push(calculateParentsExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "father"));
           // mother freq
-          result.push(calculateExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "mother"));
+          result.push(calculateParentsExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "mother"));
           // other freq
-          result.push(calculateExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "other"));
+          result.push(calculateParentsExpectationFrequency(data, expectationsArray[i], salaryAnswerArray[j], "other"));
         }
       }
       return result;
     }
 
-    function calculateExpectationFrequency(data, expectationLevel, salaryAnswer, optionalParent) {
+    function calculateExpectationFrequency(data, expectationLevel, questionLikert, answerLikert) {
+      var tick = "Tick";
+      var frequency  = 0;
+      data.forEach(function(d) {
+        if (getHighestExpectationString(d) === expectationLevel
+          && d[questionLikert] === answerLikert) {
+          frequency++;
+        }
+      });
+      return frequency;
+    }
+
+    function calculateParentsExpectationFrequency(data, expectationLevel, salaryAnswer, optionalParent) {
       // mother, father, other
       var parentQuestionsArray = ["PA01Q01", "PA01Q02", "PA01Q03"];
       var parentOptions = ["mother", "father", "other"];
@@ -168,6 +180,33 @@ angular.module('pisaVisualisationApp')
       }
       // Missing
       return;
+    }
+
+    function getChildrensAnswersBasedOnExpectations(data) {
+      // To create a csv file:
+      // expectation,question,strongly disagree, disagree, agree, strongly agree
+      // where question is the likert scaled rating answer
+      var result = [];
+      var likertQuestionArray = ["ST87Q01", "ST87Q04", "ST87Q05", "ST87Q06", "ST87Q07"];
+      var likertAnswerArray = ["Strongly disagree", "Disagree", "Agree", "Strongly agree"];
+      var expectationsArray = ["ISCED lv2", "ISCED lv3B,C", "ISCED lv3A", "ISCED lv4", "ISCED lv5B", "ISCED lv5A,6"];
+
+      // expectation
+      for (var i = 0; i < expectationsArray.length; i++) {
+        // question
+        for (var j = 0; j < likertQuestionArray.length; j++) {
+          // expectation
+          result.push(expectationsArray[i]);
+          // answer
+          result.push(likertQuestionArray[j]);
+          // likert answer
+          for (var answer = 0; answer < likertAnswerArray.length; answer++) {
+            // disagree
+            result.push(calculateExpectationFrequency(data, expectationsArray[i], likertQuestionArray[j], likertAnswerArray[answer]));
+          }
+        }
+      }
+      return result;
     }
 
     function calculateQualificationFrequency(data, expectationQuestion, salaryAnswer, qualificationAnswer, qualificationsArray) {
@@ -264,6 +303,9 @@ angular.module('pisaVisualisationApp')
       },
       createCSVFile: function(results, outputFileName, headerInfo, indexCutPoint) {
         return createCsvFile(results, outputFileName, headerInfo, indexCutPoint);
+      },
+      getChildrensAnswersBasedOnExpectations: function(data) {
+        return getChildrensAnswersBasedOnExpectations(data);
       }
     };
   });

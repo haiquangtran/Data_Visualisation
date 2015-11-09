@@ -68,62 +68,61 @@ angular.module('pisaVisualisationApp')
             //];
 
             var answer = "Yes";
-
             var colourScheme = ["#A0CAA0", "#66C266", "#007A00", "#005C00"];
 
             d3.csv(fileName, function (data) {
               data.forEach(function (d) {
 
                 // Father qualifications
-                if (queryService.doesQuestionMatchAnswer("PA03Q04", d, answer)) {
-                  queryService.addTo(fatherQualifications, 4, "PA03Q04", d, answer);
-                } else if (queryService.doesQuestionMatchAnswer("PA03Q03", d, answer)) {
-                  queryService.addTo(fatherQualifications, 3, "PA03Q03", d, answer);
-                } else if (queryService.doesQuestionMatchAnswer("PA03Q02", d, answer)) {
-                  queryService.addTo(fatherQualifications, 2, "PA03Q02", d, answer);
-                } else if (queryService.doesQuestionMatchAnswer("PA03Q01", d, answer)) {
-                  queryService.addTo(fatherQualifications, 1, "PA03Q01", d, answer);
-                } else {
-                  var no = "No";
-                  if (queryService.doesQuestionMatchAnswer("PA03Q04", d, no)
-                    || queryService.doesQuestionMatchAnswer("PA03Q03", d, no)
-                    || queryService.doesQuestionMatchAnswer("PA03Q02", d, no)
-                    || queryService.doesQuestionMatchAnswer("PA03Q01", d, no)) {
-                    fatherQualifications[0]++;
-                  }
-                }
-                // Mothers qualifications
-                if (queryService.doesQuestionMatchAnswer("PA05Q04", d, answer)) {
-                  queryService.addTo(motherQualifications, 4, "PA05Q04", d, answer);
-                } else if (queryService.doesQuestionMatchAnswer("PA05Q03", d, answer)) {
-                  queryService.addTo(motherQualifications, 3, "PA05Q03", d, answer);
-                } else if (queryService.doesQuestionMatchAnswer("PA05Q02", d, answer)) {
-                  queryService.addTo(motherQualifications, 2, "PA05Q02", d, answer);
-                } else if (queryService.doesQuestionMatchAnswer("PA05Q01", d, answer)) {
-                  queryService.addTo(motherQualifications, 1, "PA05Q01", d, answer);
-                } else {
-                  var no = "No";
-                  if (queryService.doesQuestionMatchAnswer("PA05Q04", d, no)
-                    || queryService.doesQuestionMatchAnswer("PA05Q03", d, no)
-                    || queryService.doesQuestionMatchAnswer("PA05Q02", d, no)
-                    || queryService.doesQuestionMatchAnswer("PA05Q01", d, no)) {
-                    motherQualifications[0]++;
-                  }
-                }
+                //if (queryService.doesQuestionMatchAnswer("PA03Q04", d, answer)) {
+                //  queryService.addTo(fatherQualifications, 4, "PA03Q04", d, answer);
+                //} else if (queryService.doesQuestionMatchAnswer("PA03Q03", d, answer)) {
+                //  queryService.addTo(fatherQualifications, 3, "PA03Q03", d, answer);
+                //} else if (queryService.doesQuestionMatchAnswer("PA03Q02", d, answer)) {
+                //  queryService.addTo(fatherQualifications, 2, "PA03Q02", d, answer);
+                //} else if (queryService.doesQuestionMatchAnswer("PA03Q01", d, answer)) {
+                //  queryService.addTo(fatherQualifications, 1, "PA03Q01", d, answer);
+                //} else {
+                //  var no = "No";
+                //  if (queryService.doesQuestionMatchAnswer("PA03Q04", d, no)
+                //    || queryService.doesQuestionMatchAnswer("PA03Q03", d, no)
+                //    || queryService.doesQuestionMatchAnswer("PA03Q02", d, no)
+                //    || queryService.doesQuestionMatchAnswer("PA03Q01", d, no)) {
+                //    fatherQualifications[0]++;
+                //  }
+                //}
+                //// Mothers qualifications
+                //if (queryService.doesQuestionMatchAnswer("PA05Q04", d, answer)) {
+                //  queryService.addTo(motherQualifications, 4, "PA05Q04", d, answer);
+                //} else if (queryService.doesQuestionMatchAnswer("PA05Q03", d, answer)) {
+                //  queryService.addTo(motherQualifications, 3, "PA05Q03", d, answer);
+                //} else if (queryService.doesQuestionMatchAnswer("PA05Q02", d, answer)) {
+                //  queryService.addTo(motherQualifications, 2, "PA05Q02", d, answer);
+                //} else if (queryService.doesQuestionMatchAnswer("PA05Q01", d, answer)) {
+                //  queryService.addTo(motherQualifications, 1, "PA05Q01", d, answer);
+                //} else {
+                //  var no = "No";
+                //  if (queryService.doesQuestionMatchAnswer("PA05Q04", d, no)
+                //    || queryService.doesQuestionMatchAnswer("PA05Q03", d, no)
+                //    || queryService.doesQuestionMatchAnswer("PA05Q02", d, no)
+                //    || queryService.doesQuestionMatchAnswer("PA05Q01", d, no)) {
+                //    motherQualifications[0]++;
+                //  }
+                //}
 
                 // Salary
-                queryService.addTo(salary, 0, "PA07Q01", d, "Less than <$A>");
-                queryService.addTo(salary, 1, "PA07Q01", d, "<$A> or more but less than <$B>");
-                queryService.addTo(salary, 2, "PA07Q01", d, "<$B> or more but less than <$C>");
-                queryService.addTo(salary, 3, "PA07Q01", d, "<$C> or more but less than <$D>");
-                queryService.addTo(salary, 4, "PA07Q01", d, "<$D> or more but less than <$E>");
-                queryService.addTo(salary, 5, "PA07Q01", d, "<$E> or more");
-
-                var tick = "Tick";
-
-                // Expectations
-                queryService.addToExpectations(expectations, d, tick);
-                queryService.addToHeatMap(heatMap, d, tick);
+                //queryService.addTo(salary, 0, "PA07Q01", d, "Less than <$A>");
+                //queryService.addTo(salary, 1, "PA07Q01", d, "<$A> or more but less than <$B>");
+                //queryService.addTo(salary, 2, "PA07Q01", d, "<$B> or more but less than <$C>");
+                //queryService.addTo(salary, 3, "PA07Q01", d, "<$C> or more but less than <$D>");
+                //queryService.addTo(salary, 4, "PA07Q01", d, "<$D> or more but less than <$E>");
+                //queryService.addTo(salary, 5, "PA07Q01", d, "<$E> or more");
+                //
+                //var tick = "Tick";
+                //
+                //// Expectations
+                //queryService.addToExpectations(expectations, d, tick);
+                //queryService.addToHeatMap(heatMap, d, tick);
 
                 //queryService.addTo(expectationsTwo, 0, "PA19Q01", d, tick); // lv2
                 //queryService.addTo(expectationsTwo, 1, "PA19Q02", d, tick); // lv3B or C
@@ -134,7 +133,8 @@ angular.module('pisaVisualisationApp')
 
                 return d;
               });
-
+              //console.log("Doing something");
+              //var results = queryService.getChildrensAnswersBasedOnExpectations(data);
               //var results = queryService.getParentsExpectationsBasedOnSalary(data);
               //var results = queryService.getQualifications(data);
               //console.log("father qualifications " + fatherQualifications);
@@ -144,10 +144,12 @@ angular.module('pisaVisualisationApp')
               //console.log("expectations and salary " + heatMap);
               //console.log("RESULTS: " + results);
               //console.log("RESULTS SIZE " + results.length);
+              //console.log('results ' + results);
 
+              //var headerInfo = "expectation,question,strongly disagree,disagree,agree,strongly agree";
+              //queryService.createCSVFile(results, 'school_feelings', headerInfo,6);
+              //
               var graphQualifications = d3.select(element[0]);
-
-
               // Frequency of parents qualifications
               graphQualifications.append("div").attr("class", "backDrop")
                 .selectAll('div')

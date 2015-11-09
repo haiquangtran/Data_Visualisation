@@ -48,7 +48,6 @@ angular.module('pisaVisualisationApp')
             if(!fileName){ return; }
 
             d3.csv(fileName, function(error, data) {
-              console.log(fileName)
               data.forEach(function (d) {
                 // calc percentages
                 d["Strongly disagree"] = +d[1] * 100 / d.N;
