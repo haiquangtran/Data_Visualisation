@@ -80,9 +80,7 @@ angular.module('pisaVisualisationApp')
       getFileNameSchoolFeelings_l3A: getFileNameSchoolFeelings_l3A(),
       getFileNameSchoolFeelings_l4: getFileNameSchoolFeelings_l4(),
       getFileNameSchoolFeelings_l5B: getFileNameSchoolFeelings_l5B(),
-      getFileNameSchoolFeelings_l6: getFileNameSchoolFeelings_l6(),
-      test: dir + "test.csv",
-      getFileNameRaw: dir + "raw.csv"
+      getFileNameSchoolFeelings_l6: getFileNameSchoolFeelings_l6()
     };
   });
 
