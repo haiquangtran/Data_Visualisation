@@ -23,7 +23,6 @@ angular.module('pisaVisualisationApp')
 
           var y = d3.scale.ordinal()
             .rangeRoundBands([0, height], .3);
-
           var x = d3.scale.linear()
             .rangeRound([0, width]);
 
@@ -132,12 +131,12 @@ angular.module('pisaVisualisationApp')
                   return index % 2 == 0 ? "even" : "uneven";
                 });
 
-              //svg.append("g")
-              //  .attr("class", "y axis")
-              //  .append("line")
-              //  .attr("x1", x(0))
-              //  .attr("x2", x(0))
-              //  .attr("y2", height);
+              svg.append("g")
+                .attr("class", "y axis")
+                .append("line")
+                .attr("x1", x(0))
+                .attr("x2", x(0))
+                .attr("y2", height);
 
               var startp = svg.append("g").attr("class", "legendbox").attr("id", "mylegendbox");
               // this is not nice, we should calculate the bounding box and use that
