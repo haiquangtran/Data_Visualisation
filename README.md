@@ -2,7 +2,8 @@
 # PISA Visualisation
 
 The PISA dataset contains educational data from 14-15 year old international students.
-This project visualises this data in a meaningful way.
+This project visualises what influences parent's expectations.
+It also shows how students answer questions about school based on parent expectations.
 
 ## Build & development
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
